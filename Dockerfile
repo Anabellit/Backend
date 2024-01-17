@@ -1,9 +1,11 @@
 # Build stage
 FROM maven:3.9.6-eclipse-temurin-21 AS build
-COPY src /app/src
-COPY pom.xml /app
-COPY checkstyle.xml /app
-RUN mvn -f /app/pom.xml clean verify
+WORKDIR /app
+COPY pom.xml .
+COPY checkstyle.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package
 
 # Run stage
 FROM openjdk:21-jdk-slim
