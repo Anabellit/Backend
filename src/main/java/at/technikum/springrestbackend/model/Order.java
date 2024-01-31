@@ -1,10 +1,19 @@
 package at.technikum.springrestbackend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
     private String id;
 
     private String restaurant;
+
+    protected Order() {}
 
     public Order(String id, String restaurant) {
         this.id = id;
