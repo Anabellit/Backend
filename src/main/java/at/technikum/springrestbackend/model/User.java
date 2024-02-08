@@ -1,6 +1,8 @@
 package at.technikum.springrestbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -8,26 +10,32 @@ public class User {
 
     //FELDER
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     // wie macht man für Select, die einzigen Werte, die möglich sind?
     // --> muss geprüft werden im Backend (m, w, d)
+    @NotBlank
     private String salutation;
 
     // other ist verpflichtend, wenn bei Salutation bestimmter Wert "d" ausgewählt wird.
     // wie wird das im Constructor dargestellt?
     private String other;
 
+    @NotBlank
+    @Email
     private String email;
 
-    //private String username;
-
+    @NotBlank
     private String password;
 
+    @NotBlank
     private String country;
 
+    @NotBlank
     private String pictureUrl; // wenn keines hochgeladen wird, dann nimm das default picture
 
+    @NotBlank
     private String token;
 
     private boolean isAdmin;
@@ -57,28 +65,15 @@ public class User {
         this.email = email;
         this.password = password;
         this.country = country;
-        this.pictureUrl = pictureUrl;
+        if (pictureUrl == null){
+            this.pictureUrl = "resources/user_default_photo.jpg";
+        } else {
+            this.pictureUrl = pictureUrl;
+        }
         this.token = token;
         this.isAdmin = isAdmin;
     }
 
-    public User(String id,
-                String salutation,
-                String email,
-                String password,
-                String country,
-                String pictureUrl,
-                String token,
-                boolean isAdmin) {
-        this.id = id;
-        this.salutation = salutation;
-        this.email = email;
-        this.password = password;
-        this.country = country;
-        this.pictureUrl = pictureUrl;
-        this.token = token;
-        this.isAdmin = isAdmin;
-    }
 
     // GETTER UND SETTER
     public String getId() {
@@ -150,6 +145,10 @@ public class User {
     }
 
     public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+        if (pictureUrl == null){
+            this.pictureUrl = "resources/user_default_photo.jpg";
+        } else {
+            this.pictureUrl = pictureUrl;
+        }
     }
 }
