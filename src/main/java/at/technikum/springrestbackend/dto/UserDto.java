@@ -1,5 +1,9 @@
 package at.technikum.springrestbackend.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+
 public class UserDto {
 
     //FELDER
@@ -7,27 +11,31 @@ public class UserDto {
 
     // wie macht man für Select, die einzigen Werte, die möglich sind?
     // --> muss geprüft werden im Backend (m, w, d)
+    @NotBlank
     private String salutation;
 
     // other ist verpflichtend, wenn bei Salutation bestimmter Wert "d" ausgewählt wird.
     // wie wird das im Constructor dargestellt?
     private String other;
 
+    @NotBlank
+    @Email
     private String email;
 
+    @NotBlank
     private String password;
 
+    @NotBlank
     private String country;
 
     private String pictureUrl; // wenn keines hochgeladen wird, dann nimm das default picture
 
+    @NotBlank
     private String token;
 
     private boolean isAdmin;
 
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "houseid", referencedColumnName = "id")
-    private House house;*/
+    //private House house;
 
 
 
@@ -56,27 +64,8 @@ public class UserDto {
         this.isAdmin = isAdmin;
     }
 
-    // constructor für, wenn "m" oder "f" bei salutation ausgewählt wurde
-    public UserDto(String id,
-                   String salutation,
-                   String email,
-                   String password,
-                   String country,
-                   String pictureUrl,
-                   String token,
-                   boolean isAdmin) {
-        this.id = id;
-        this.salutation = salutation;
-        this.email = email;
-        this.password = password;
-        this.country = country;
-        this.pictureUrl = pictureUrl;
-        this.token = token;
-        this.isAdmin = isAdmin;
-    }
 
     // GETTER UND SETTER
-
 
     public String getId() {
         return id;

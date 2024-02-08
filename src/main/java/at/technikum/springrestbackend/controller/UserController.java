@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//importieren
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 //Controller
 @RestController
@@ -54,19 +50,20 @@ public class UserController {
         return userMapper.toDto(user);
     }
 
+
     // anpassen für update:
     // finden des users nach id und doer dann etwas ändern
     // returned dann das, was geändert wurde (?), bzw das, was drin steht
     @PutMapping("/{id}")
     public UserDto update(@PathVariable String id) {
-        return new UserDto("1", "female", "testerin@test.at", "testerin",
-                "passwd123", "Australia", "1234ertt", true);
+        return new UserDto("1", "female", "", "testerin@test.at", "passwd123",
+                "Australia", "pic123", "1234ertt", true);
     }
 
     @DeleteMapping("/{id}")
     public UserDto delete(@PathVariable String id) {
-        return new UserDto("1", "male", "tester@test.at", "tester",
-                "passwd123", "Austria", "oiweoriwer43", false);
+        return new UserDto("1", "male", "", "tester@test.at", "passwd123",
+                "Norway", "pic456", "oiweoriwer43", false);
     }
 }
 
