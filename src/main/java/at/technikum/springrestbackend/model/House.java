@@ -2,6 +2,8 @@ package at.technikum.springrestbackend.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "houses")
 public class House {
@@ -9,10 +11,17 @@ public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String caption;
+
+    private String description;
 
     private String address;
 
-    private String description;
+    private String pictureURL;
+
+   // @Embedded
+    @OneToMany(mappedBy = "houses")
+    private List<Amenity> amenities;
 
     @OneToOne
     private User user;
@@ -41,12 +50,12 @@ public class House {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCaption() {
+        return caption;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 
     public String getDescription() {
@@ -56,13 +65,29 @@ public class House {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public User getUser() {
-        return user;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    public List<Amenity> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<Amenity> amenities) {
+        this.amenities = amenities;
+    }
+
+    public String getPictureURL() {
+        return pictureURL;
+    }
+
+    public void setPictureURL(String pictureURL) {
+        this.pictureURL = pictureURL;
     }
 }
 

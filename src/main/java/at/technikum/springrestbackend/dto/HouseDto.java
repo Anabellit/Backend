@@ -1,7 +1,10 @@
 package at.technikum.springrestbackend.dto;
 
+import at.technikum.springrestbackend.model.Amenity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.OneToOne;
+
+import java.util.List;
 
 // Boolean hidden
 public class HouseDto {
@@ -24,7 +27,7 @@ public class HouseDto {
 
     private String pictureURL; // List
 
-    private Amenities amenities;
+    private List<Amenity> amenities;
 
     public HouseDto() {
     }
@@ -91,11 +94,11 @@ public class HouseDto {
         this.pictureURL = pictureURL;
     }
 
-    public Amenities getAmenities() {
+    public List<Amenity> getAmenities() {
         return amenities;
     }
 
-    public void setAmenities(Amenities amenities) {
+    public void setAmenities(List<Amenity> amenities) {
         this.amenities = amenities;
     }
 
