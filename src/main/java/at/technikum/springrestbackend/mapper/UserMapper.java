@@ -36,6 +36,7 @@ public class UserMapper {
                     userDto.getPictureUrl(),
                     userDto.getToken(),
                     userDto.isAdmin()
+
             );
         }
 

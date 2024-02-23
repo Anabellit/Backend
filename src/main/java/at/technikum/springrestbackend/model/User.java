@@ -56,6 +56,33 @@ public class User {
                 String country,
                 String pictureUrl,
                 String token,
+                boolean isAdmin,
+                House house) {
+        this.id = id;
+        this.salutation = salutation;
+        this.other = other;
+        this.email = email;
+        this.password = password;
+        this.country = country;
+        if (pictureUrl == null){
+            this.pictureUrl = "resources/user_default_photo.jpg";
+        } else {
+            this.pictureUrl = pictureUrl;
+        }
+        this.token = token;
+        this.isAdmin = isAdmin;
+        this.house = house;
+    }
+
+    //Construktor ohne House
+    public User(String id,
+                String salutation,
+                String other,
+                String email,
+                String password,
+                String country,
+                String pictureUrl,
+                String token,
                 boolean isAdmin) {
         this.id = id;
         this.salutation = salutation;
@@ -71,7 +98,6 @@ public class User {
         this.token = token;
         this.isAdmin = isAdmin;
     }
-
 
     // GETTER UND SETTER
     public String getId() {
@@ -148,5 +174,13 @@ public class User {
         } else {
             this.pictureUrl = pictureUrl;
         }
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
     }
 }

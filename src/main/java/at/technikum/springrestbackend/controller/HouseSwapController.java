@@ -38,7 +38,9 @@ public class HouseSwapController {
 
     // Status von Request ändern: pending, cancelled and accept
     @PutMapping("/{id}")
-    public HouseSwapDto updateRequestStatus(@PathVariable Long id, @RequestParam("status") String status) {
+    public HouseSwapDto updateRequestStatus(@PathVariable Long id,
+                                            @RequestParam("status")
+                                            String status) {
         return houseSwapService.updateRequestStatus(id, status);
     }
 

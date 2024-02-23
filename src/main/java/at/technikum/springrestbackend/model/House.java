@@ -1,10 +1,6 @@
 package at.technikum.springrestbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "houses")
@@ -18,13 +14,24 @@ public class House {
 
     private String description;
 
+    @OneToOne
+    private User user;
+
     protected House() {}
+
+    public House(String id, String address, String description, User user) {
+        this.id = id;
+        this.address = address;
+        this.description = description;
+        this.user = user;
+    }
 
     public House(String id, String address, String description) {
         this.id = id;
         this.address = address;
         this.description = description;
     }
+
 
     public String getId() {
         return id;
@@ -48,6 +55,14 @@ public class House {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 

@@ -34,7 +34,7 @@ public class UserDto {
 
     private boolean isAdmin;
 
-    private House house;
+    private HouseDto houseDto;
 
 
 
@@ -60,6 +60,7 @@ public class UserDto {
         this.pictureUrl = pictureUrl;
         this.token = token;
         this.isAdmin = isAdmin;
+
     }
 
 
@@ -135,5 +136,13 @@ public class UserDto {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public HouseDto getHouseDto() {
+        return houseDto;
+    }
+
+    public void setHouseDto(HouseDto houseDto) {
+        this.houseDto = houseDto;
     }
 }

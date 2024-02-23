@@ -1,32 +1,39 @@
 package at.technikum.springrestbackend.service;
 
-import at.technikum.springrestbackend.dto.HouseDto;
+import at.technikum.springrestbackend.exception.EntityNotFoundException;
+import at.technikum.springrestbackend.model.House;
+import at.technikum.springrestbackend.repository.HouseRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class HouseService {
 
-    private final List<HouseDto> houses = new ArrayList<>();
+    private final HouseRepository houseRepository;
 
-    public List<HouseDto> getAllHouses() {
-        return houses;
+    public HouseService(HouseRepository houseRepository) {
+        this.houseRepository = houseRepository;
     }
 
-    public HouseDto getHouseById(Long id) {
-        return null; // Dummy-Rückgabewert
+    public List<House> getAllHouses() {
+        return houseRepository.findAll();
     }
 
-    public HouseDto createHouse(HouseDto houseDto) {
-        return houseDto; // Dummy-Rückgabewert
+    public House getHouseById(String id) {
+        return houseRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
-    public HouseDto updateHouse(Long id, HouseDto houseDto) {
-        return houseDto;
+    public House createHouse(House house) {
+        return houseRepository.save(house); // Dummy-Rückgabewert
     }
 
-    public void deleteHouse(Long id) {
+    /*public HouseDto updateHouse(String id, HouseDto houseDto) {
+        return houseRepository.;
+    }*/
+
+    public void deleteHouse(String id) {
+        houseRepository.deleteById(id);
     }
 }

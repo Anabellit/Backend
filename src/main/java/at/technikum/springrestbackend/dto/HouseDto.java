@@ -20,13 +20,20 @@ public class HouseDto {
 
     @NotBlank
     @OneToOne
-    private String user;
+    private UserDto userDto;
 
     private String pictureURL; // List
 
     private Amenities amenities;
 
     public HouseDto() {
+    }
+
+    public HouseDto(String id, String address, String description, UserDto userDto) {
+        this.id = id;
+        this.address = address;
+        this.description = description;
+        this.userDto = userDto;
     }
 
     public HouseDto(String id, String address, String description) {
@@ -67,13 +74,13 @@ public class HouseDto {
         this.address = address;
     }
 
-    public String getUser() {
-        return user;
+    public UserDto getUserDto() {
+        return userDto;
     }
 
-    public void setUser(String user) {
+    public void setUserDto(UserDto userDto) {
 
-        this.user = user;
+        this.userDto = userDto;
     }
 
     public String getPictureURL() {
@@ -91,4 +98,6 @@ public class HouseDto {
     public void setAmenities(Amenities amenities) {
         this.amenities = amenities;
     }
+
+
 }

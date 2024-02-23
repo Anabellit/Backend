@@ -1,6 +1,7 @@
 package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.HouseDto;
+import at.technikum.springrestbackend.dto.UserDto;
 import at.technikum.springrestbackend.model.House;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ class HouseMapperTest {
     void whenDtoValue_thenHouseSameValue() {
         // Arrange
         String id = UUID.randomUUID().toString();
-        HouseDto houseDto = new HouseDto(id, "123 Main St", "Spacious house with garden");
+        HouseDto houseDto = new HouseDto(id, "123 Main St", "Spacious house with garden", new UserDto());
 
         // Act
         House house = houseMapper.toEntity(houseDto);
