@@ -52,8 +52,8 @@ public class UserController {
 
 
     // anpassen für update:
-    // finden des users nach id und doer dann etwas ändern
-    // returned dann das, was geändert wurde (?), bzw das, was drin steht
+    // finden des users nach id und etwas ändern
+    // returned dann das, was geändert wurde
     @PutMapping("/{id}")
     public UserDto update(@PathVariable String id) {
         return new UserDto("1", "female", "", "testerin@test.at", "passwd123",
