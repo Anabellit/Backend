@@ -20,8 +20,10 @@ public class OrderMapper {
     public Order toEntity(OrderDto orderDto) {
         if (orderDto.getId() == null) {
             return new Order(
+
                     UUID.randomUUID().toString(),
                     orderDto.getRestaurant()
+
             );
         }
 
