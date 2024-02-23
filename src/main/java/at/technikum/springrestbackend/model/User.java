@@ -19,7 +19,6 @@ public class User {
     private String salutation;
 
     // other ist verpflichtend, wenn bei Salutation bestimmter Wert "d" ausgewählt wird.
-    // wie wird das im Constructor dargestellt?
     private String other;
 
     @NotBlank
@@ -40,11 +39,10 @@ public class User {
 
     private boolean isAdmin;
 
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "houseid", referencedColumnName = "id")
-    private House house;*/
 
-    // welches Feld für ein Foto-Upload? Media
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "houseid", referencedColumnName = "id")
+    private House house;
 
     // CONSTRUCTOR
 

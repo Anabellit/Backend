@@ -9,13 +9,12 @@ public class UserDto {
     //FELDER
     private String id;
 
-    // wie macht man für Select, die einzigen Werte, die möglich sind?
+    // FE Frage: wie macht man für Select, die einzigen Werte, die möglich sind?
     // --> muss geprüft werden im Backend (m, w, d)
     @NotBlank
     private String salutation;
 
     // other ist verpflichtend, wenn bei Salutation bestimmter Wert "d" ausgewählt wird.
-    // wie wird das im Constructor dargestellt?
     private String other;
 
     @NotBlank
@@ -35,7 +34,7 @@ public class UserDto {
 
     private boolean isAdmin;
 
-    //private House house;
+    private House house;
 
 
 
@@ -43,7 +42,6 @@ public class UserDto {
     public UserDto (){
     }
 
-    //constructor für, wenn "d" in salutation ausgewählt wurde
     public UserDto(String id,
                    String salutation,
                    String other,
