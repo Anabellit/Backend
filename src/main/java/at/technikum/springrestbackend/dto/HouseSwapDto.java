@@ -25,7 +25,7 @@ public class HouseSwapDto {
         this.swapHouse = swapHouse;
     }
 
-    // Getter und Setter für alle Felder
+
 
     public String getId() {
         return id;

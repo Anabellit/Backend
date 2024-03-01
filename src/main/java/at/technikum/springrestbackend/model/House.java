@@ -20,7 +20,8 @@ public class House {
     private String pictureURL;
 
    // @Embedded
-    @OneToMany(mappedBy = "houses")
+    @OneToMany
+    @JoinColumn(name = "houses_id")
     private List<Amenity> amenities;
 
     @OneToOne

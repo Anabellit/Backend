@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class UserDto {
 
-    //FELDER
+
     private String id;
 
     // FE Frage: wie macht man für Select, die einzigen Werte, die möglich sind?
@@ -37,7 +37,7 @@ public class UserDto {
 
 
 
-    // CONSTRUCTOR
+
     public UserDto (){
     }
 
@@ -63,7 +63,7 @@ public class UserDto {
     }
 
 
-    // GETTER UND SETTER
+
 
     public String getId() {
         return id;
