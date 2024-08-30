@@ -2,6 +2,7 @@ package at.technikum.springrestbackend.controller;
 
 import at.technikum.springrestbackend.dto.HouseSwapDto;
 import at.technikum.springrestbackend.service.HouseSwapService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class HouseSwapController {
 
     // Eine Anfrage erstellen
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)//SCHICKT STATUS ZURÜCK
     public HouseSwapDto createRequest(@RequestBody HouseSwapDto requestDto) {
         return houseSwapService.createRequest(requestDto);
     }
