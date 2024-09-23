@@ -10,13 +10,15 @@ import java.util.Collection;
 @Builder
 public class UserPrincipal implements UserDetails {
 
-    private final Long id;
+    private final Long userId;
 
     private final String email;
+
     private final Collection<?extends GrantedAuthority>authorities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override
