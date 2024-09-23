@@ -22,7 +22,9 @@ public class AuthController {  // Name der Klasse ist jetzt korrekt "AuthControl
     private final JwtIssuer jwtIssuer;
 
     @PostMapping("/auth/login")
-    public LoginResponse login(@RequestBody @Validated LoginRequest request, HttpServletResponse response) {
+    public LoginResponse login(@RequestBody @Validated
+    LoginRequest request,
+    HttpServletResponse response) {
         // JWT-Token erstellen
         var token = jwtIssuer.issue(1L, request.getEmail(), List.of("User"));
 

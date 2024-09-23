@@ -21,7 +21,8 @@ public class WebSecurityConfig {
         http
                 .cors().and()  // CORS aktiviert
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .formLogin().disable()
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry
@@ -39,7 +40,7 @@ public class WebSecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Frontend-URL
         config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        config.setExposedHeaders(Arrays.asList("Authorization"));  // Erlaube das Auslesen des Authorization-Headers
+        config.setExposedHeaders(Arrays.asList("Authorization"));  //  Authorization-Headers
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
