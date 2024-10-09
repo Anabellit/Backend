@@ -1,40 +1,45 @@
 package at.technikum.springrestbackend.controller;
 
-
 import at.technikum.springrestbackend.model.LoginRequest;
 import at.technikum.springrestbackend.model.LoginResponse;
-import at.technikum.springrestbackend.security.JwtIssuer;
-import jakarta.servlet.http.HttpServletResponse;
+import at.technikum.springrestbackend.security.UserPrincipal;
+import at.technikum.springrestbackend.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-@CrossOrigin
+
 @RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor // macht automatisch den Constructor für everything final
 
+public class AuthController {
 
-public class AuthController {  // Name der Klasse ist jetzt korrekt "AuthController"
+    private final AuthService authService;
 
-    private final JwtIssuer jwtIssuer;
-
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public LoginResponse login(@RequestBody @Validated
-            LoginRequest request,
-            HttpServletResponse response) {
-        // JWT-Token erstellen
-        var token = jwtIssuer.issue(1L, request.getEmail(), List.of("User"));
+            LoginRequest request) {
+        return authService.attemptLogin(request.getEmail(), request.getPassword());
+    }
 
-        // JWT-Token im Authorization-Header setzen
-        response.setHeader("Authorization", "Bearer " + token);
+    // Zum Testen von Security
+    @GetMapping("/public")
+    public String publicEndpoint() {
+        return "Everyone can see this";
+    }
 
-        // LoginResponse mit Token im Body zurückgeben
-        return LoginResponse.builder()
-                .accessToken(token)
-                .build();
+    @GetMapping("/secured")
+    public String secured(@AuthenticationPrincipal UserPrincipal principal) {
+        return "This can only be seen by a logged in user. Your email is: "
+                + principal.getEmail()
+                + " your ID: "
+                + principal.getUserId();
+    }
+
+    @GetMapping("/admin")
+    public String admin(@AuthenticationPrincipal UserPrincipal principal) {
+        return "If you see this, then you' are an admin. User ID: " + principal.getUserId();
     }
 }

@@ -9,16 +9,19 @@ import java.util.List;
 @Component
 public class JwtToPrincipalConverter {
     public UserPrincipal convert(DecodedJWT jwt) {
+        var authorityList = getClaimOrEmptyList(jwt, "au").stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+
         return UserPrincipal.builder()
-                .userId(Long.valueOf(jwt.getSubject()))
-                .email(jwt.getClaim("e").asString())
-                .authorities(extractAuthoritiesFromClaim(jwt))
+                .userId( Long.parseLong(jwt.getSubject()) )
+                .email( jwt.getClaim("e").asString() )
+                .authorities( authorityList )
                 .build();
     }
 
-    private List<SimpleGrantedAuthority> extractAuthoritiesFromClaim(DecodedJWT jwt) {
-        var claim = jwt.getClaim("a");
-        if (claim.isNull() || claim.isMissing()) return List.of();
-        return claim.asList(SimpleGrantedAuthority.class);
+    private List<String> getClaimOrEmptyList(DecodedJWT jwt, String claim) {
+        if (jwt.getClaim(claim).isNull()) return List.of();
+        return jwt.getClaim(claim).asList(String.class);
     }
 }

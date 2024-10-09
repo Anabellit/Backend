@@ -57,13 +57,13 @@ public class UserController {
     @PutMapping("/{id}")
     public UserDto update(@PathVariable String id) {
         return new UserDto("1", "female", "", "testerin@test.at", "passwd123",
-                "Australia", "pic123", "1234ertt", true);
+                "Australia", "pic123", "1234ertt", "ADMIN");
     }
 
     @DeleteMapping("/{id}")
     public UserDto delete(@PathVariable String id) {
         return new UserDto("1", "male", "", "tester@test.at", "passwd123",
-                "Norway", "pic456", "oiweoriwer43", false);
+                "Norway", "pic456", "oiweoriwer43", "USER");
     }
 }
 
