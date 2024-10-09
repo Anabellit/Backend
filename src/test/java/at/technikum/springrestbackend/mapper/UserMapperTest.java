@@ -23,7 +23,7 @@ public class UserMapperTest {
                 "Germany",
                 "1234",
                 "werwr",
-                false);
+                "ADMIN");
 
         // Act
         UserDto userDto = userMapper.toDto(user);
@@ -60,7 +60,7 @@ public class UserMapperTest {
                 "Germany",
                 "1234",
                 "werwr",
-                false);
+                "USER");
 
         // Act
         User user = userMapper.toEntity(userDto);

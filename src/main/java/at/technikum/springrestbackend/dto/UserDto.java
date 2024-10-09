@@ -1,4 +1,5 @@
 package at.technikum.springrestbackend.dto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -21,6 +22,7 @@ public class UserDto {
     private String email;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @NotBlank
@@ -31,7 +33,8 @@ public class UserDto {
     @NotBlank
     private String token;
 
-    private boolean isAdmin;
+    /*private boolean isAdmin;*/
+    private String role;
 
     private HouseDto houseDto;
 
@@ -49,7 +52,8 @@ public class UserDto {
                    String country,
                    String pictureUrl,
                    String token,
-                   boolean isAdmin) {
+                   String role
+                   /*boolean isAdmin*/) {
         this.id = id;
         this.salutation = salutation;
         this.other = other;
@@ -58,7 +62,8 @@ public class UserDto {
         this.country = country;
         this.pictureUrl = pictureUrl;
         this.token = token;
-        this.isAdmin = isAdmin;
+        /*this.isAdmin = isAdmin;*/
+        this.role = role;
 
     }
 
@@ -121,12 +126,20 @@ public class UserDto {
         this.token = token;
     }
 
-    public boolean isAdmin() {
+    /*public boolean isAdmin() {
         return isAdmin;
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }*/
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getPictureUrl() {

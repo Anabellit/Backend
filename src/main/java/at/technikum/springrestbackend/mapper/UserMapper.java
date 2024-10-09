@@ -19,7 +19,8 @@ public class UserMapper {
         userDto.setCountry(user.getCountry());
         userDto.setPictureUrl(user.getPictureUrl());
         userDto.setToken(user.getToken());
-        userDto.setAdmin(user.isAdmin());
+        //userDto.setAdmin(user.isAdmin());
+        userDto.setRole(user.getRole);
 
         return userDto;
     }
@@ -35,7 +36,8 @@ public class UserMapper {
                     userDto.getCountry(),
                     userDto.getPictureUrl(),
                     userDto.getToken(),
-                    userDto.isAdmin()
+                    /*userDto.isAdmin()*/
+                    userDto.getRole()
 
             );
         }
@@ -49,7 +51,8 @@ public class UserMapper {
                 userDto.getCountry(),
                 userDto.getPictureUrl(),
                 userDto.getToken(),
-                userDto.isAdmin()
+                /*userDto.isAdmin()*/
+                userDto.getRole()
         );
     }
 }

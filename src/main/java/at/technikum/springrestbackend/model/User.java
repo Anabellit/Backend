@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "users")
 public class User {
 
+    public String getRole;
     //FELDER
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,7 +38,9 @@ public class User {
     @NotBlank
     private String token;
 
-    private boolean isAdmin;
+    /*private boolean isAdmin;*/
+
+    private String role;
 
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -56,7 +59,8 @@ public class User {
                 String country,
                 String pictureUrl,
                 String token,
-                boolean isAdmin,
+                /*boolean isAdmin,*/
+                String role,
                 House house) {
         this.id = id;
         this.salutation = salutation;
@@ -70,7 +74,8 @@ public class User {
             this.pictureUrl = pictureUrl;
         }
         this.token = token;
-        this.isAdmin = isAdmin;
+        /*this.isAdmin = isAdmin;*/
+        this.role = role;
         this.house = house;
     }
 
@@ -83,7 +88,8 @@ public class User {
                 String country,
                 String pictureUrl,
                 String token,
-                boolean isAdmin) {
+                String role
+                /*boolean isAdmin*/) {
         this.id = id;
         this.salutation = salutation;
         this.other = other;
@@ -96,7 +102,8 @@ public class User {
             this.pictureUrl = pictureUrl;
         }
         this.token = token;
-        this.isAdmin = isAdmin;
+        /*this.isAdmin = isAdmin;*/
+        this.role = role;
     }
 
     // GETTER UND SETTER
@@ -156,12 +163,20 @@ public class User {
         this.token = token;
     }
 
-    public boolean isAdmin() {
+   /* public boolean isAdmin() {
         return isAdmin;
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }*/
+
+    public String getGetRole() {
+        return getRole;
+    }
+
+    public void setGetRole(String getRole) {
+        this.getRole = getRole;
     }
 
     public String getPictureUrl() {
