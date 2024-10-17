@@ -46,8 +46,10 @@ public class HouseSwapService {
         // Mapping von DTO zu Entity
         HouseSwap houseSwap = houseSwapMapper.toEntity(houseSwapDto, house);
 
+        // Speichere den HouseSwap in der Datenbank
         HouseSwap savedSwap = houseSwapRepository.save(houseSwap);
 
+        // Rückgabe des gespeicherten HouseSwap als DTO
         return houseSwapMapper.toDto(savedSwap);
     }
 
@@ -62,12 +64,14 @@ public class HouseSwapService {
                 .orElseThrow(() -> new RuntimeException("House not found"));
 
         // Aktualisiere die Daten im HouseSwap
-        houseSwap.setStatus(houseSwapDto.getSwapStatus().toString());
+        houseSwap.setStatus(houseSwapDto.getStatus());  // Aktualisiere den Status
         houseSwap.setMessage(houseSwapDto.getMessage());  // Aktualisiere die Nachricht
         houseSwap.setHouse(house);  // Aktualisiere das zugehörige Haus
 
+        // Speichere die aktualisierten Daten
         HouseSwap updatedSwap = houseSwapRepository.save(houseSwap);
 
+        // Rückgabe des aktualisierten HouseSwap als DTO
         return houseSwapMapper.toDto(updatedSwap);
     }
 

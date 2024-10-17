@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 public class HouseSwapMapper {
 
     // Mapping von Entity zu DTO
-    public HouseSwapDto toDtoFromEntity(HouseSwap houseSwap) {
+    public HouseSwapDto toDto(HouseSwap houseSwap) {
         HouseSwapDto houseSwapDto = new HouseSwapDto();
         houseSwapDto.setId(houseSwap.getId());
-        houseSwapDto.setHouseId(houseSwap.getHouse().getId());
+        houseSwapDto.setHouseId(houseSwap.getHouse().getId());  // Hole die ID des Hauses
         houseSwapDto.setMessage(houseSwap.getMessage());
-        houseSwapDto.setSwapStatus(houseSwap.getStatus()); // Mapping des Enum SwapStatus
+        houseSwapDto.setStatus(houseSwap.getStatus());  // Mapping des Status
         return houseSwapDto;
     }
 
@@ -22,9 +22,9 @@ public class HouseSwapMapper {
     public HouseSwap toEntity(HouseSwapDto houseSwapDto, House house) {
         return new HouseSwap(
                 houseSwapDto.getId(),
-                house,
+                house,  // Setze das zugehörige House
                 houseSwapDto.getMessage(),
-                houseSwapDto.getSwapStatus() // Mapping des Enum SwapStatus
+                houseSwapDto.getStatus()  // Status aus DTO übernehmen
         );
     }
 }

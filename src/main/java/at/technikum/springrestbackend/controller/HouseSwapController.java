@@ -2,7 +2,9 @@ package at.technikum.springrestbackend.controller;
 
 import at.technikum.springrestbackend.dto.HouseSwapDto;
 import at.technikum.springrestbackend.service.HouseSwapService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,19 +31,21 @@ public class HouseSwapController {
 
     // POST-Endpunkt, um einen neuen HouseSwap zu erstellen
     @PostMapping
-    public HouseSwapDto createHouseSwap(@RequestBody HouseSwapDto houseSwapDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public HouseSwapDto createHouseSwap(@RequestBody @Valid HouseSwapDto houseSwapDto) {
         return houseSwapService.createHouseSwap(houseSwapDto);
     }
 
     // PUT-Endpunkt, um einen bestehenden HouseSwap zu aktualisieren
     @PutMapping("/{id}")
     public HouseSwapDto updateHouseSwap(@PathVariable Long id,
-                                        @RequestBody HouseSwapDto houseSwapDto) {
+                                        @RequestBody @Valid HouseSwapDto houseSwapDto) {
         return houseSwapService.updateHouseSwap(id, houseSwapDto);
     }
 
     // DELETE-Endpunkt, um einen HouseSwap zu löschen
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteHouseSwap(@PathVariable Long id) {
         houseSwapService.deleteHouseSwap(id);
     }

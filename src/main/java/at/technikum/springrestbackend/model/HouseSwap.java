@@ -17,28 +17,28 @@ public class HouseSwap {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Die ID des HouseSwaps
+    private Long id;  // Die ID des HouseSwaps
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)  // Beziehung zu House
     @JoinColumn(name = "house_id", nullable = false)
-    @NotNull(message = "House is required") // Validierung: Das zugehörige Haus darf nicht null sein
-    private House house; // Verweis auf das Haus
+    @NotNull(message = "House is required.")  // Validierung: House darf nicht null sein
+    private House house;
 
     @Column(nullable = false, length = 500)
-    @NotBlank(message = "Message is required") // Validierung: Nachricht darf nicht leer sein
-    @Size(max = 500, message = "Message cannot be longer than 500 characters")
-    private String message; // Nachricht des HouseSwaps
+    @NotBlank(message = "Message is required.")
+    @Size(max = 500, message = "Message cannot be longer than 500 characters.")
+    private String message;  // Nachricht des HouseSwaps
 
+    @Column(nullable = false, length = 10)
+    @NotBlank(message = "Status is required.")
+    @Size(max = 10, message = "Status cannot be longer than 10 characters.")
+    private String status = "pending";  // Standardstatus: pending
 
-    @NotBlank(message = "Status is required") // Validierung: Status darf nicht leer sein
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private HouseSwapWithHouse.SwapStatus status = HouseSwapWithHouse.SwapStatus.PENDING;  // Enum mit Standardwert PENDING
-
-    public HouseSwap(HouseSwapWithHouse.SwapStatus status, String message, House house, Long id) {
-        this.status = status;
-        this.message = message;
-        this.house = house;
+    // Konstruktor zur einfacheren Verwendung
+    public HouseSwap(Long id, House house, String message, String status) {
         this.id = id;
+        this.house = house;
+        this.message = message;
+        this.status = status;
     }
 }

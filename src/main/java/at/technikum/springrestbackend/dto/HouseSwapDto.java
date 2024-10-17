@@ -1,24 +1,26 @@
 package at.technikum.springrestbackend.dto;
 
-import at.technikum.springrestbackend.model.HouseSwapWithHouse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class HouseSwapDto {
+    private Long id;
 
-    private Long id; // Die ID des HouseSwaps (automatisch generiert)
+    @NotNull(message = "House ID is required.")
+    private Long houseId;  // Die ID des Hauses, auf das der HouseSwap verweist
 
-    @NotNull(message = "House ID is required") // House ID darf nicht null sein
-    private Long houseId; // Foreign Key: Verweis auf das House
+    @NotBlank(message = "Message is required.")
+    @Size(max = 500, message = "Message cannot be longer than 500 characters.")
+    private String message;  // Nachricht des HouseSwaps
 
-    @NotBlank(message = "Message is required")
-    @Size(max = 500, message = "Message cannot be longer than 500 characters")
-    private String message; // Nachricht des HouseSwaps
-
-    @NotNull(message = "Status is required.")
-    private HouseSwapWithHouse.SwapStatus swapStatus = HouseSwapWithHouse.SwapStatus.PENDING;
-
+    @NotBlank(message = "Status is required.")
+    @Size(max = 10, message = "Status cannot be longer than 10 characters.")
+    private String status;  // Status als String (z.B. PENDING, ACCEPTED)
 }
