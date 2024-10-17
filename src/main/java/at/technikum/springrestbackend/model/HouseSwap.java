@@ -2,70 +2,43 @@ package at.technikum.springrestbackend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "house_swaps")
+@Table(name = "houseswaps")
+@Getter
+@Setter
+@NoArgsConstructor
 public class HouseSwap {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    @NotBlank
-    private String user;
-    @NotBlank
-    private String swapper;
-    @NotBlank
-    private String house;
-    @NotBlank
-    private String swapHouse;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Die ID des HouseSwaps
 
-    protected HouseSwap() {}
+    @ManyToOne
+    @JoinColumn(name = "house_id", nullable = false)
+    @NotNull(message = "House is required") // Validierung: Das zugehörige Haus darf nicht null sein
+    private House house; // Verweis auf das Haus
 
-    public HouseSwap(String id, String user, String swapper, String house, String swapHouse) {
-        this.id = id;
-        this.user = user;
-        this.swapper = swapper;
+    @Column(nullable = false, length = 500)
+    @NotBlank(message = "Message is required") // Validierung: Nachricht darf nicht leer sein
+    @Size(max = 500, message = "Message cannot be longer than 500 characters")
+    private String message; // Nachricht des HouseSwaps
+
+
+    @NotBlank(message = "Status is required") // Validierung: Status darf nicht leer sein
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HouseSwapWithHouse.SwapStatus status = HouseSwapWithHouse.SwapStatus.PENDING;  // Enum mit Standardwert PENDING
+
+    public HouseSwap(HouseSwapWithHouse.SwapStatus status, String message, House house, Long id) {
+        this.status = status;
+        this.message = message;
         this.house = house;
-        this.swapHouse = swapHouse;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getSwapper() {
-        return swapper;
-    }
-
-    public void setSwapper(String swapper) {
-        this.swapper = swapper;
-    }
-
-    public String getHouse() {
-        return house;
-    }
-
-    public void setHouse(String house) {
-        this.house = house;
-    }
-
-    public String getSwapHouse() {
-        return swapHouse;
-    }
-
-    public void setSwapHouse(String swapHouse) {
-        this.swapHouse = swapHouse;
     }
 }

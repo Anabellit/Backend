@@ -1,96 +1,50 @@
 package at.technikum.springrestbackend.model;
 
 import jakarta.persistence.*;
-
-import java.util.List;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "houses")
 public class House {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private String caption;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String description;
+    @Column(nullable = false)
+    private String typeOfHouse;
 
-    private String address;
+    @Column(nullable = false)
+    private String country;
 
-    private String pictureURL;
+    @Column(nullable = false, length = 50)
+    private String title;
 
-   // @Embedded
-    @OneToMany
-    @JoinColumn(name = "houses_id")
-    private List<Amenity> amenities;
+    @Column(nullable = false, length = 50)
+    private String subtitle;
 
-    @OneToOne
-    private User user;
+    @Column(nullable = false, length = 50)
+    private String shortDescription;
 
-    protected House() {}
+    @Column(nullable = false, length = 1000)
+    private String longDescription;
 
-    public House(String id, String address, String description, User user) {
-        this.id = id;
-        this.address = address;
-        this.description = description;
-        this.user = user;
-    }
+    @Column(nullable = true)
+    private boolean hasWifi;
 
-    public House(String id, String address, String description) {
-        this.id = id;
-        this.address = address;
-        this.description = description;
-    }
+    @Column(nullable = true)
+    private boolean hasKitchen;
 
+    @Column(nullable = true)
+    private boolean hasStreaming;
 
-    public String getId() {
-        return id;
-    }
+    @Column(nullable = true)
+    private boolean hasHomeOffice;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @Column(nullable = true)
+    private boolean nearSupermarkets;
 
-    public String getCaption() {
-        return caption;
-    }
-
-    public void setCaption(String caption) {
-        this.caption = caption;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-
-    public List<Amenity> getAmenities() {
-        return amenities;
-    }
-
-    public void setAmenities(List<Amenity> amenities) {
-        this.amenities = amenities;
-    }
-
-    public String getPictureURL() {
-        return pictureURL;
-    }
-
-    public void setPictureURL(String pictureURL) {
-        this.pictureURL = pictureURL;
-    }
+    @Column(nullable = true)
+    private boolean hasSelfCheckin;
 }
-
-
-

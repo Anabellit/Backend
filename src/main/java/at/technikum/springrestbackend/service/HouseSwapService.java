@@ -1,44 +1,78 @@
 package at.technikum.springrestbackend.service;
 
 import at.technikum.springrestbackend.dto.HouseSwapDto;
+import at.technikum.springrestbackend.mapper.HouseSwapMapper;
+import at.technikum.springrestbackend.model.House;
+import at.technikum.springrestbackend.model.HouseSwap;
+import at.technikum.springrestbackend.repository.HouseRepository;
+import at.technikum.springrestbackend.repository.HouseSwapRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class HouseSwapService {
 
-    private final List<HouseSwapDto> requests = new ArrayList<>();
+    private final HouseSwapRepository houseSwapRepository;
+    private final HouseRepository houseRepository;
+    private final HouseSwapMapper houseSwapMapper;
 
-    public List<HouseSwapDto> getAllRequests() {
-        return requests;
+    // Methode zum Abrufen aller HouseSwaps mit Hausdetails
+    public List<HouseSwapDto> getAllHouseSwapsWithDetails() {
+        List<HouseSwap> houseSwaps = houseSwapRepository.findAll();
+
+        return houseSwaps.stream()
+                .map(houseSwapMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public HouseSwapDto getRequestById(Long id) {
-        // Logik, um die Anfrage mit der angegebenen ID zu finden
-        return null; // Dummy-Rückgabewert
+    // Methode zum Abrufen eines einzelnen HouseSwap mit Hausdetails
+    public HouseSwapDto getHouseSwapWithDetailsById(Long id) {
+        HouseSwap houseSwap = houseSwapRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("HouseSwap not found"));
+
+        return houseSwapMapper.toDto(houseSwap);  // Mappe die Entität zu einem DTO
     }
 
-    public HouseSwapDto createRequest(HouseSwapDto requestDto) {
-        // Logik, um eine neue Anfrage zu erstellen und zur Liste hinzuzufügen
-        return requestDto; // Dummy-Rückgabewert
+    // Methode zum Erstellen eines neuen HouseSwap
+    public HouseSwapDto createHouseSwap(HouseSwapDto houseSwapDto) {
+        // Hole das zugehörige House
+        House house = houseRepository.findById(houseSwapDto.getHouseId())
+                .orElseThrow(() -> new RuntimeException("House not found"));
+
+        // Mapping von DTO zu Entity
+        HouseSwap houseSwap = houseSwapMapper.toEntity(houseSwapDto, house);
+
+        HouseSwap savedSwap = houseSwapRepository.save(houseSwap);
+
+        return houseSwapMapper.toDto(savedSwap);
     }
 
-    public HouseSwapDto updateRequestStatus(Long id, String status) {
-        // Logik, um den Status einer vorhandenen Anfrage zu aktualisieren
-        return null; // Dummy-Rückgabewert
+    // Methode zum Aktualisieren eines HouseSwap
+    public HouseSwapDto updateHouseSwap(Long id, HouseSwapDto houseSwapDto) {
+        // Hole das bestehende HouseSwap
+        HouseSwap houseSwap = houseSwapRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("HouseSwap not found"));
+
+        // Hole das zugehörige House aus dem DTO
+        House house = houseRepository.findById(houseSwapDto.getHouseId())
+                .orElseThrow(() -> new RuntimeException("House not found"));
+
+        // Aktualisiere die Daten im HouseSwap
+        houseSwap.setStatus(houseSwapDto.getSwapStatus().toString());
+        houseSwap.setMessage(houseSwapDto.getMessage());  // Aktualisiere die Nachricht
+        houseSwap.setHouse(house);  // Aktualisiere das zugehörige Haus
+
+        HouseSwap updatedSwap = houseSwapRepository.save(houseSwap);
+
+        return houseSwapMapper.toDto(updatedSwap);
     }
 
-    public void acceptRequest(Long id) {
-        // Logik, um eine Anfrage zu akzeptieren
-    }
-
-    public void rejectRequest(Long id) {
-        // Logik, um eine Anfrage abzulehnen
-    }
-
-    public void deleteRequest(Long id) {
-        // Logik, um eine Anfrage zu löschen
+    // Methode zum Löschen eines HouseSwap
+    public void deleteHouseSwap(Long id) {
+        houseSwapRepository.deleteById(id);
     }
 }

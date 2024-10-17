@@ -1,44 +1,30 @@
 package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.HouseSwapDto;
+import at.technikum.springrestbackend.model.House;
 import at.technikum.springrestbackend.model.HouseSwap;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class HouseSwapMapper {
 
-    public HouseSwapDto toDto(HouseSwap houseSwap) {
+    // Mapping von Entity zu DTO
+    public HouseSwapDto toDtoFromEntity(HouseSwap houseSwap) {
         HouseSwapDto houseSwapDto = new HouseSwapDto();
         houseSwapDto.setId(houseSwap.getId());
-        houseSwapDto.setUser(houseSwap.getUser());
-        houseSwapDto.setSwapper(houseSwap.getSwapper());
-        houseSwapDto.setHouse(houseSwap.getHouse());
-        houseSwapDto.setSwapHouse(houseSwap.getSwapHouse());
+        houseSwapDto.setHouseId(houseSwap.getHouse().getId());
+        houseSwapDto.setMessage(houseSwap.getMessage());
+        houseSwapDto.setSwapStatus(houseSwap.getStatus()); // Mapping des Enum SwapStatus
         return houseSwapDto;
     }
 
-    public HouseSwap toEntity(HouseSwapDto houseSwapDto) {
-        if (houseSwapDto.getId() == null) {
-            return new HouseSwap(
-                    UUID.randomUUID().toString(),
-                    houseSwapDto.getUser(),
-                    houseSwapDto.getSwapper(),
-                    houseSwapDto.getHouse(),
-                    houseSwapDto.getSwapHouse()
-            );
-        }
-
+    // Mapping von DTO zu Entity
+    public HouseSwap toEntity(HouseSwapDto houseSwapDto, House house) {
         return new HouseSwap(
                 houseSwapDto.getId(),
-                houseSwapDto.getUser(),
-                houseSwapDto.getSwapper(),
-                houseSwapDto.getHouse(),
-                houseSwapDto.getSwapHouse()
+                house,
+                houseSwapDto.getMessage(),
+                houseSwapDto.getSwapStatus() // Mapping des Enum SwapStatus
         );
     }
 }
-
-
-

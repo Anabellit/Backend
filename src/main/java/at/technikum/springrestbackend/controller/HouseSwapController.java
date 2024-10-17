@@ -2,65 +2,47 @@ package at.technikum.springrestbackend.controller;
 
 import at.technikum.springrestbackend.dto.HouseSwapDto;
 import at.technikum.springrestbackend.service.HouseSwapService;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/swaps")
+@RequestMapping("/houseswap")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:63343")  // Erlaubt CORS-Anfragen von deinem Frontend
 public class HouseSwapController {
 
     private final HouseSwapService houseSwapService;
 
-    public HouseSwapController(HouseSwapService houseSwapService) {
-        this.houseSwapService = houseSwapService;
+    // GET-Endpunkt, um alle HouseSwaps zusammen mit den House-Daten abzurufen
+    @GetMapping
+    public List<HouseSwapDto> getAllHouseSwapsWithDetails() {
+        return houseSwapService.getAllHouseSwapsWithDetails();
     }
 
-
-    //alle Anfragen
-    @GetMapping()
-    public List<HouseSwapDto> getAllRequests() {
-        return houseSwapService.getAllRequests();
-    }
-
-    // Eine bestimmte Anfrage
+    // GET-Endpunkt, um einen bestimmten HouseSwap mit den House-Daten nach ID abzurufen
     @GetMapping("/{id}")
-    public HouseSwapDto getRequestById(@PathVariable Long id) {
-        return houseSwapService.getRequestById(id);
+    public HouseSwapDto getHouseSwapWithDetailsById(@PathVariable Long id) {
+        return houseSwapService.getHouseSwapWithDetailsById(id);
     }
 
-    // Eine Anfrage erstellen
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)//SCHICKT STATUS ZURÜCK
-    public HouseSwapDto createRequest(@RequestBody HouseSwapDto requestDto) {
-        return houseSwapService.createRequest(requestDto);
+    // POST-Endpunkt, um einen neuen HouseSwap zu erstellen
+    @PostMapping
+    public HouseSwapDto createHouseSwap(@RequestBody HouseSwapDto houseSwapDto) {
+        return houseSwapService.createHouseSwap(houseSwapDto);
     }
 
-    // Status von Request ändern: pending, cancelled and accept
+    // PUT-Endpunkt, um einen bestehenden HouseSwap zu aktualisieren
     @PutMapping("/{id}")
-    public HouseSwapDto updateRequestStatus(@PathVariable Long id,
-                                            @RequestParam("status")
-                                            String status) {
-        return houseSwapService.updateRequestStatus(id, status);
+    public HouseSwapDto updateHouseSwap(@PathVariable Long id,
+                                        @RequestBody HouseSwapDto houseSwapDto) {
+        return houseSwapService.updateHouseSwap(id, houseSwapDto);
     }
 
-    //Request akzeptieren
-    @PutMapping("/{id}/accept")
-    public void acceptRequest(@PathVariable Long id) {
-        houseSwapService.acceptRequest(id);
-    }
-
-    // Request reject
-    @PutMapping("/{id}/reject")
-    public void rejectRequest(@PathVariable Long id) {
-        houseSwapService.rejectRequest(id);
-    }
-
-    // Optional delete? Oder gleich wie cancel
+    // DELETE-Endpunkt, um einen HouseSwap zu löschen
     @DeleteMapping("/{id}")
-    public void deleteRequest(@PathVariable Long id) {
-        houseSwapService.deleteRequest(id);
+    public void deleteHouseSwap(@PathVariable Long id) {
+        houseSwapService.deleteHouseSwap(id);
     }
 }

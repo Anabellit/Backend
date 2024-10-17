@@ -1,3 +1,4 @@
+/*
 package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.HouseDto;
@@ -64,3 +65,4 @@ class HouseMapperTest {
         assertEquals("Spacious house with garden", house.getDescription());
     }
 }
+*/

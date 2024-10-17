@@ -1,69 +1,24 @@
 package at.technikum.springrestbackend.dto;
 
+import at.technikum.springrestbackend.model.HouseSwapWithHouse;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 public class HouseSwapDto {
-    @NotBlank
-    private String id;
-    @NotBlank
-    private String user;
-    @NotBlank
-    private String swapper;
-    @NotBlank
-    private String house;
-    @NotBlank
-    private String swapHouse;
 
-    public HouseSwapDto() {
-    }
+    private Long id; // Die ID des HouseSwaps (automatisch generiert)
 
-    public HouseSwapDto(String id, String user, String swapper, String house, String swapHouse) {
-        this.id = id;
-        this.user = user;
-        this.swapper = swapper;
-        this.house = house;
-        this.swapHouse = swapHouse;
-    }
+    @NotNull(message = "House ID is required") // House ID darf nicht null sein
+    private Long houseId; // Foreign Key: Verweis auf das House
 
+    @NotBlank(message = "Message is required")
+    @Size(max = 500, message = "Message cannot be longer than 500 characters")
+    private String message; // Nachricht des HouseSwaps
 
+    @NotNull(message = "Status is required.")
+    private HouseSwapWithHouse.SwapStatus swapStatus = HouseSwapWithHouse.SwapStatus.PENDING;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getSwapper() {
-        return swapper;
-    }
-
-    public void setSwapper(String swapper) {
-        this.swapper = swapper;
-    }
-
-    public String getHouse() {
-        return house;
-    }
-
-    public void setHouse(String house) {
-        this.house = house;
-    }
-
-    public String getSwapHouse() {
-        return swapHouse;
-    }
-
-    public void setSwapHouse(String swapHouse) {
-        this.swapHouse = swapHouse;
-    }
 }

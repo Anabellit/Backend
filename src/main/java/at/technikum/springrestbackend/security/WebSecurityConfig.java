@@ -26,7 +26,6 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         http
                 //.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -34,20 +33,20 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .exceptionHandling(h -> h.authenticationEntryPoint(unauthorizedHandler))
-                .securityMatcher("/**");
-
-        http
+                .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry
                         // Swagger UI access
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
-
                         .requestMatchers("/").permitAll()
-
                         .requestMatchers("/auth/login").permitAll()
-
+                        .requestMatchers("/houses").permitAll()
+                        .requestMatchers("/houses/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
+                        .requestMatchers("/houseswaps").permitAll()
+                        .requestMatchers("/houseswap").permitAll()
+                        .requestMatchers("/houseswaps/**").permitAll()
+                        .requestMatchers("/houseswap/**").permitAll()
                         // allow errors so that @ResponseStatus() will show and not 401
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated());
