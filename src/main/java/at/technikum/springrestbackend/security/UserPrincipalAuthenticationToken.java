@@ -1,26 +1,20 @@
 package at.technikum.springrestbackend.security;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 
-public class UserPrincipalAuthenticationToken extends AbstractAuthenticationToken {
+public class UserPrincipalAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
-    private final UserPrincipal principal;
-
-    public UserPrincipalAuthenticationToken(UserPrincipal principal) {
-        super(principal.getAuthorities());
-        this.principal = principal;
-        setAuthenticated(true);
+    // Konstruktor für den vollständigen Authentication-Token
+    public UserPrincipalAuthenticationToken(Object principal, Object credentials,
+                                            Collection<? extends GrantedAuthority> authorities) {
+        super(principal, credentials, authorities); // Ruft den Konstruktor von UsernamePasswordAuthenticationToken auf
     }
 
-    @Override
-    public Object getCredentials(){
-        return null;
-    }
 
-    @Override
-    public UserPrincipal getPrincipal() {
-        return principal;
+    public UserPrincipalAuthenticationToken(Object principal) {
+        super(principal, null, null);
     }
-
 }

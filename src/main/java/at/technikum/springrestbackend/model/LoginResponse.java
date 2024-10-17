@@ -1,12 +1,16 @@
 package at.technikum.springrestbackend.model;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
+@Setter
+@AllArgsConstructor
+@Builder // Optional, falls du den Builder verwenden möchtest
 public class LoginResponse {
-
-    private final String token;
+    private String token;
+    private String email;
+    private String role;
 }

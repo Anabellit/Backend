@@ -1,51 +1,38 @@
 package at.technikum.springrestbackend.service;
 
 import at.technikum.springrestbackend.model.LoginResponse;
+import at.technikum.springrestbackend.entity.UserEntity;
+import at.technikum.springrestbackend.repository.UserRepository;
 import at.technikum.springrestbackend.security.JwtIssuer;
-import at.technikum.springrestbackend.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final JwtIssuer jwtIssuer;
 
-    private final AuthenticationManager authenticationManager;
-
     public LoginResponse attemptLogin(String email, String password) {
-        var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        var principal = (UserPrincipal) authentication.getPrincipal();
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            // JWT-Token erstellen
+            String token = jwtIssuer.issue(JwtIssuer.Request.builder()
+                    .userId(user.getId())
+                    .email(user.getEmail())
+                    .roles(List.of(user.getRole())) // Rolle wird als Liste hinzugefügt
+                    .build());
 
-        /*var roles = principal.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();*/
-
-        // JWT-Token erstellen
-        var token = jwtIssuer.issue(JwtIssuer.Request.builder()
-                .userId(principal.getUserId())
-                .email(principal.getEmail())
-                .roles(principal.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority).toList())
-                .build());
-
-       /* // JWT-Token im Authorization-Header setzen
-        response.setHeader("Authorization", "Bearer " + token);*/
-
-        // LoginResponse mit Token im Body zurückgeben
-        return LoginResponse.builder()
-                .token(token)
-                .build();
+            return new LoginResponse(token, user.getEmail(), user.getRole());
+        } else {
+            throw new RuntimeException("Invalid credentials");
+        }
     }
 }
-

@@ -16,5 +16,15 @@ public class UserEntity {
 
     private String role;
 
+    private String country;
 
+    private String salutation;
+
+    private String other;
+
+    private String pictureUrl;
+
+    private String token;
+
+    // Getter und Setter werden von Lombok erzeugt
 }

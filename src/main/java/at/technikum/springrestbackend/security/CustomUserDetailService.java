@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
@@ -20,8 +19,12 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = userService.findByEmail(username).orElseThrow();
+
+        // Umwandeln von String-ID zu Long, falls erforderlich
+        Long userId = Long.parseLong(user.getId());
+
         return UserPrincipal.builder()
-                .userId(user.getId())
+                .userId(userId)
                 .email(user.getEmail())
                 .authorities(List.of(new SimpleGrantedAuthority(user.getRole())))
                 .password(user.getPassword())

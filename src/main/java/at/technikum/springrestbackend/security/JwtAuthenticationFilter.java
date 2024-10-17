@@ -24,13 +24,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
-                                    throws ServletException, IOException {
+            throws ServletException, IOException {
+
         extractTokenFromRequest(request)
-                .map(jwtDecoder::decode)
-                .map(jwtToPrincipalConverter::convert)
-                .map(UserPrincipalAuthenticationToken::new)
+                .map(jwtDecoder::decode)  // JWT entschlüsseln
+                .map(jwtToPrincipalConverter::convert)  // JWT in UserPrincipal konvertieren
+                .map(userPrincipal -> new UserPrincipalAuthenticationToken(
+                        userPrincipal,
+                        null,  // Keine Anmeldeinformationen erforderlich
+                        userPrincipal.getAuthorities()))  // Benutzerrollen hinzufügen
                 .ifPresent(authentication -> SecurityContextHolder.getContext()
-                        .setAuthentication(authentication));
+                        .setAuthentication(authentication));  // Benutzer authentifizieren
 
         filterChain.doFilter(request, response);
     }

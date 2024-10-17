@@ -1,72 +1,79 @@
 package at.technikum.springrestbackend.controller;
 
-
 import at.technikum.springrestbackend.dto.UserDto;
-import at.technikum.springrestbackend.mapper.UserMapper;
-import at.technikum.springrestbackend.model.User;
 import at.technikum.springrestbackend.service.UserService;
-import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-
-//Controller
 @RestController
-@RequestMapping("/users")
-@CrossOrigin
+@RequestMapping("/api/users")
 public class UserController {
-    private final UserMapper userMapper;
-    private final UserService userService;
 
-    public UserController(
-                UserMapper userMapper,
-                UserService userService
-    ) {
-        this.userMapper = userMapper;
-        this.userService = userService;
+    @Autowired
+    private UserService userService;
+
+    // Benutzerregistrierung
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+        try {
+            userService.registerUser(userDto);
+            return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping
-    public List<UserDto> readAll() {
-        return userService.findAll().stream()
-            .map(userMapper::toDto)
-            .collect(Collectors.toList());
+    // Benutzer anhand der E-Mail abrufen
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
+        Optional<UserDto> userDto = userService.findByEmail(email);
+        return userDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    // Alle Benutzer auflisten
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    // Benutzer anhand der ID abrufen
     @GetMapping("/{id}")
-    public UserDto read(@PathVariable String id) {
-        User user = userService.find(id);
-        return userMapper.toDto(user);
+    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
+        try {
+            UserDto user = userService.find(id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody @Valid UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        user = userService.save(user);
-        return userMapper.toDto(user);
+    // Benutzer aktualisieren
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
+        try {
+            userDto.setId(id);
+            userService.save(userDto);
+            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
-
-    // anpassen für update:
-    // finden des users nach id und etwas ändern
-    // returned dann das, was geändert wurde
-    @PutMapping("/{id}")
-    public UserDto update(@PathVariable String id) {
-        return new UserDto("1", "female", "", "testerin@test.at", "passwd123",
-                "Australia", "pic123", "1234ertt", "ADMIN");
-    }
-
-    @DeleteMapping("/{id}")
-    public UserDto delete(@PathVariable String id) {
-        return new UserDto("1", "male", "", "tester@test.at", "passwd123",
-                "Norway", "pic456", "oiweoriwer43", "USER");
+    // Benutzer löschen
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+        try {
+            userService.deleteUser(id);
+            return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }
-
-
-
-

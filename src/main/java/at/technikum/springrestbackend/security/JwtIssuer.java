@@ -19,12 +19,17 @@ public class JwtIssuer {
     public String issue(Request request) {
         var now = Instant.now();
 
+
+        var rolesWithPrefix = request.getRoles().stream()
+                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                .toList();
+
         return JWT.create()
                 .withSubject(String.valueOf(request.userId))
                 .withIssuedAt(now)
                 .withExpiresAt(now.plus(properties.getTokenDuration()))
                 .withClaim("e", request.getEmail())
-                .withClaim("au", request.getRoles())
+                .withClaim("au", rolesWithPrefix)  // Speicher die Rollen  "ROLE_"
                 .sign(Algorithm.HMAC256(properties.getSecretKey()));
     }
 
