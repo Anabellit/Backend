@@ -10,10 +10,10 @@ public class UserPrincipalAuthenticationToken extends UsernamePasswordAuthentica
     // Konstruktor für den vollständigen Authentication-Token
     public UserPrincipalAuthenticationToken(Object principal, Object credentials,
                                             Collection<? extends GrantedAuthority> authorities) {
-        super(principal, credentials, authorities); // Ruft den Konstruktor von UsernamePasswordAuthenticationToken auf
+        super(principal, credentials, authorities);
     }
 
-
+    // Konstruktor für den Token ohne Credentials und Authorities
     public UserPrincipalAuthenticationToken(Object principal) {
         super(principal, null, null);
     }

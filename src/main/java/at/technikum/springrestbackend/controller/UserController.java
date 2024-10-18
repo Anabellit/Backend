@@ -2,78 +2,46 @@ package at.technikum.springrestbackend.controller;
 
 import at.technikum.springrestbackend.dto.UserDto;
 import at.technikum.springrestbackend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    // Benutzerregistrierung
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
-        try {
-            userService.registerUser(userDto);
-            return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public void registerUser(@RequestBody UserDto userDto) throws Exception {
+        userService.registerUser(userDto);
     }
 
-    // Benutzer anhand der E-Mail abrufen
     @GetMapping("/email/{email}")
-    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
-        Optional<UserDto> userDto = userService.findByEmail(email);
-        return userDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public Optional<UserDto> findByEmail(@PathVariable String email) {
+        return userService.findByEmail(email);
     }
 
-    // Alle Benutzer auflisten
-    @GetMapping("/all")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = userService.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    @GetMapping
+    public List<UserDto> findAll() {
+        return userService.findAll();
     }
 
-    // Benutzer anhand der ID abrufen
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
-        try {
-            UserDto user = userService.find(id);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    public UserDto findById(@PathVariable String id) {
+        return userService.find(id);
     }
 
-    // Benutzer aktualisieren
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
-        try {
-            userDto.setId(id);
-            userService.save(userDto);
-            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @PostMapping
+    public UserDto saveUser(@RequestBody UserDto userDto) {
+        return userService.save(userDto);
     }
 
-    // Benutzer löschen
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) {
-        try {
-            userService.deleteUser(id);
-            return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable String id) {
+        userService.deleteUser(id);
     }
 }

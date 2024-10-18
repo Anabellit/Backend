@@ -8,18 +8,13 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "users")
 public class User {
 
-    public String getRole;
-    //FELDER
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    // wie macht man für Select, die einzigen Werte, die möglich sind?
-    // --> muss geprüft werden im Backend (m, w, d)
     @NotBlank
     private String salutation;
 
-    // other ist verpflichtend, wenn bei Salutation bestimmter Wert "d" ausgewählt wird.
     private String other;
 
     @NotBlank
@@ -33,80 +28,36 @@ public class User {
     private String country;
 
     @NotBlank
-    private String pictureUrl; // wenn keines hochgeladen wird, dann nimm das default picture
+    private String pictureUrl;
 
     @NotBlank
     private String token;
 
-    /*private boolean isAdmin;*/
-
     private String role;
-
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "houseid", referencedColumnName = "id")
     private House house;
 
-    // CONSTRUCTOR
+    // No-args constructor for JPA
+    public User() {
+    }
 
-    protected User() {}
-
-    public User(String id,
-                String salutation,
-                String other,
-                String email,
-                String password,
-                String country,
-                String pictureUrl,
-                String token,
-                /*boolean isAdmin,*/
-                String role,
-                House house) {
+    public User(String id, String salutation, String other, String email, String password,
+                String country, String pictureUrl, String token, String role, House house) {
         this.id = id;
         this.salutation = salutation;
         this.other = other;
         this.email = email;
         this.password = password;
         this.country = country;
-        if (pictureUrl == null){
-            this.pictureUrl = "resources/user_default_photo.jpg";
-        } else {
-            this.pictureUrl = pictureUrl;
-        }
+        this.pictureUrl = pictureUrl != null ? pictureUrl : "resources/user_default_photo.jpg";
         this.token = token;
-        /*this.isAdmin = isAdmin;*/
         this.role = role;
         this.house = house;
     }
 
-    //Construktor ohne House
-    public User(String id,
-                String salutation,
-                String other,
-                String email,
-                String password,
-                String country,
-                String pictureUrl,
-                String token,
-                String role
-                /*boolean isAdmin*/) {
-        this.id = id;
-        this.salutation = salutation;
-        this.other = other;
-        this.email = email;
-        this.password = password;
-        this.country = country;
-        if (pictureUrl == null){
-            this.pictureUrl = "resources/user_default_photo.jpg";
-        } else {
-            this.pictureUrl = pictureUrl;
-        }
-        this.token = token;
-        /*this.isAdmin = isAdmin;*/
-        this.role = role;
-    }
-
-    // GETTER UND SETTER
+    // Getter and Setter
     public String getId() {
         return id;
     }
@@ -155,6 +106,14 @@ public class User {
         this.country = country;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl != null ? pictureUrl : "resources/user_default_photo.jpg";
+    }
+
     public String getToken() {
         return token;
     }
@@ -163,32 +122,12 @@ public class User {
         this.token = token;
     }
 
-   /* public boolean isAdmin() {
-        return isAdmin;
+    public String getRole() {
+        return role;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }*/
-
-    public String getGetRole() {
-        return getRole;
-    }
-
-    public void setGetRole(String getRole) {
-        this.getRole = getRole;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        if (pictureUrl == null){
-            this.pictureUrl = "resources/user_default_photo.jpg";
-        } else {
-            this.pictureUrl = pictureUrl;
-        }
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public House getHouse() {

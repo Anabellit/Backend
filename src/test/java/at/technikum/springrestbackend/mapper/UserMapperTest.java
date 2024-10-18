@@ -1,72 +1,39 @@
 package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.UserDto;
-import at.technikum.springrestbackend.model.User;
+import at.technikum.springrestbackend.entity.UserEntity;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserMapperTest {
+
+    private final UserMapper userMapper = new UserMapper();
+
     @Test
-    void whenUserValue_thenDtoSameValue() {
-        // Arrange
-        UserMapper userMapper = new UserMapper();
-        String id = UUID.randomUUID().toString();
-        User user = new User(id,
-                "Frau",
-                "",
-                "test@testnetzwerk.at",
-                "passwort567",
-                "Germany",
-                "1234",
-                "werwr",
-                "ADMIN");
+    public void whenDtoNoId_thenUserEntityHasId() {
+        UserDto userDto = new UserDto(null, "Mr.", null, "test@example.com", "password", "Austria", "url/to/picture", "token", "USER");
+        UserEntity userEntity = userMapper.toEntity(userDto);
 
-        // Act
-        UserDto userDto = userMapper.toDto(user);
-
-        // Assert
-        assertEquals(id, userDto.getId());
-        assertEquals("test@testnetzwerk.at", userDto.getEmail());
+        assertNotNull(userEntity.getId(), "UserEntity ID should not be null after conversion");
     }
 
     @Test
-    void whenDtoNoId_thenUserHasId() {
-        // Arrange
-        UserMapper userMapper = new UserMapper();
-        UserDto userDto = new UserDto();
-        userDto.setEmail("test@testnetzwerk.at");
+    public void whenUserEntityValue_thenDtoSameValue() {
+        UserEntity userEntity = new UserEntity("123e4567-e89b-12d3-a456-426614174000", "Mr.", "Other", "test@example.com", "password", "Austria", "url/to/picture", "token", "USER");
+        UserDto userDto = userMapper.toDto(userEntity);
 
-        // Act
-        User user = userMapper.toEntity(userDto);
-
-        // Assert
-        assertNotNull(user.getId());
+        assertEquals(userEntity.getId(), userDto.getId());
+        assertEquals(userEntity.getSalutation(), userDto.getSalutation());
+        assertEquals(userEntity.getEmail(), userDto.getEmail());
     }
 
     @Test
-    void whenDtoValue_thenUserSameValue() {
-        // Arrange
-        UserMapper userMapper = new UserMapper();
-        String id = UUID.randomUUID().toString();
-        UserDto userDto = new UserDto(id,
-                "Frau",
-                "",
-                "test@testnetzwerk.at",
-                "passwort567",
-                "Germany",
-                "1234",
-                "werwr",
-                "USER");
+    public void whenDtoValue_thenUserEntitySameValue() {
+        UserDto userDto = new UserDto("123e4567-e89b-12d3-a456-426614174000", "Mr.", "Other", "test@example.com", "password", "Austria", "url/to/picture", "token", "USER");
+        UserEntity userEntity = userMapper.toEntity(userDto);
 
-        // Act
-        User user = userMapper.toEntity(userDto);
-
-        // Assert
-        assertEquals(id, user.getId());
-        assertEquals("test@testnetzwerk.at", user.getEmail());
+        assertEquals(userDto.getId(), userEntity.getId());
+        assertEquals(userDto.getSalutation(), userEntity.getSalutation());
+        assertEquals(userDto.getEmail(), userEntity.getEmail());
     }
 }

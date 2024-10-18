@@ -25,7 +25,7 @@ public class AuthService {
         if (passwordEncoder.matches(password, user.getPassword())) {
             // JWT-Token erstellen
             String token = jwtIssuer.issue(JwtIssuer.Request.builder()
-                    .userId(user.getId())
+                    .userId(user.getId())  // ID ist jetzt vom Typ String
                     .email(user.getEmail())
                     .roles(List.of(user.getRole())) // Rolle wird als Liste hinzugefügt
                     .build());
