@@ -43,13 +43,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/houses").permitAll()
                         .requestMatchers("/houses/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/houseswaps").permitAll()
                         .requestMatchers("/houseswap").permitAll()
-                        .requestMatchers("/houseswaps/**").permitAll()
                         .requestMatchers("/houseswap/**").permitAll()
-                        // allow errors so that @ResponseStatus() will show and not 401
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated());
+                        .requestMatchers("/users").permitAll()
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/error").permitAll());
+                        //.anyRequest().authenticated());
 
         return http.build();
     }

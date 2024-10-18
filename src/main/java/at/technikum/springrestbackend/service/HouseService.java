@@ -3,12 +3,13 @@ package at.technikum.springrestbackend.service;
 import at.technikum.springrestbackend.dto.HouseDto;
 import at.technikum.springrestbackend.mapper.HouseMapper;
 import at.technikum.springrestbackend.model.House;
+import at.technikum.springrestbackend.model.User;
 import at.technikum.springrestbackend.repository.HouseRepository;
+import at.technikum.springrestbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class HouseService {
 
     private final HouseRepository houseRepository;
+    private final UserRepository userRepository;
     private final HouseMapper houseMapper;
 
     public List<HouseDto> getAllHouses() {
@@ -24,45 +26,35 @@ public class HouseService {
                 .collect(Collectors.toList());
     }
 
+    public HouseDto getHouseById(Long id) {
+        House house = houseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("House not found"));
+        return houseMapper.toDto(house);
+    }
+
     public HouseDto createHouse(HouseDto houseDto) {
-        House house = houseMapper.toEntity(houseDto);
+        User user = userRepository.findById(houseDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        House house = houseMapper.toEntity(houseDto, user);
         house = houseRepository.save(house);
         return houseMapper.toDto(house);
     }
 
-    public HouseDto getHouseById(Long id) {
-        Optional<House> house = houseRepository.findById(id);
-        if (house.isPresent()) {
-            return houseMapper.toDto(house.get());
-        } else {
-            throw new RuntimeException("House not found with id: " + id);
-        }
-    }
-
-
     public HouseDto updateHouse(Long id, HouseDto houseDto) {
-        House existingHouse = houseRepository.findById(id)
+        House house = houseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("House not found"));
 
-        // Aktualisiere die Felder des bestehenden Hauses mit den neuen Daten
-        existingHouse.setTypeOfHouse(houseDto.getTypeOfHouse());
-        existingHouse.setCountry(houseDto.getCountry());
-        existingHouse.setTitle(houseDto.getTitle());
-        existingHouse.setSubtitle(houseDto.getSubtitle());
-        existingHouse.setShortDescription(houseDto.getShortDescription());
-        existingHouse.setLongDescription(houseDto.getLongDescription());
-        existingHouse.setHasWifi(houseDto.isHasWifi());
-        existingHouse.setHasKitchen(houseDto.isHasKitchen());
-        existingHouse.setHasStreaming(houseDto.isHasStreaming());
-        existingHouse.setHasHomeOffice(houseDto.isHasHomeOffice());
-        existingHouse.setNearSupermarkets(houseDto.isNearSupermarkets());
-        existingHouse.setHasSelfCheckin(houseDto.isHasSelfCheckin());
+        User user = userRepository.findById(houseDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Speichere das aktualisierte Haus
-        houseRepository.save(existingHouse);
+        house = houseMapper.toEntity(houseDto, user);
+        house.setId(id);  // Sicherstellen, dass die ID nicht überschrieben wird
+        house = houseRepository.save(house);
+        return houseMapper.toDto(house);
+    }
 
-        // Gib das aktualisierte Haus als DTO zurück
-        return houseMapper.toDto(existingHouse);
+    public void deleteHouse(Long id) {
+        houseRepository.deleteById(id);
     }
 }
-

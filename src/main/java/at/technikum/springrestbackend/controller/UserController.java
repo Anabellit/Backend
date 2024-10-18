@@ -1,5 +1,49 @@
 package at.technikum.springrestbackend.controller;
 
+import at.technikum.springrestbackend.dto.UserDto;
+import at.technikum.springrestbackend.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@CrossOrigin(origins = "http://localhost:63343")
+@RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserService userService;
+
+    // POST - Registrierung eines neuen Benutzers
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto registerUser(@RequestBody @Valid UserDto userDto) {
+        if (userService.emailExists(userDto.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+        return userService.registerUser(userDto);
+    }
+
+    // GET - Abrufen eines Benutzers anhand der ID
+    @GetMapping("/{id}")
+    public UserDto getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
+    // PUT - Aktualisieren eines Benutzers anhand der ID
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
+        return userService.updateUser(id, userDto);
+    }
+}
+
+
+
+/*
+package at.technikum.springrestbackend.controller;
+
 
 import at.technikum.springrestbackend.dto.UserDto;
 import at.technikum.springrestbackend.mapper.UserMapper;
@@ -70,3 +114,4 @@ public class UserController {
 
 
 
+*/

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "houses")
+@Table(name = "houses_")
 public class House {
 
     @Id
@@ -47,4 +47,8 @@ public class House {
 
     @Column(nullable = true)
     private boolean hasSelfCheckin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

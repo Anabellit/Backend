@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
@@ -19,7 +18,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userService.findByEmail(username).orElseThrow();
+        var user = userService.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return UserPrincipal.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
@@ -28,3 +28,4 @@ public class CustomUserDetailService implements UserDetailsService {
                 .build();
     }
 }
+

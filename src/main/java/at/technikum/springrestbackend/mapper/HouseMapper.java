@@ -2,6 +2,7 @@ package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.HouseDto;
 import at.technikum.springrestbackend.model.House;
+import at.technikum.springrestbackend.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,10 +23,11 @@ public class HouseMapper {
         dto.setHasHomeOffice(house.isHasHomeOffice());
         dto.setNearSupermarkets(house.isNearSupermarkets());
         dto.setHasSelfCheckin(house.isHasSelfCheckin());
+        dto.setUserId(house.getUser().getId());
         return dto;
     }
 
-    public House toEntity(HouseDto dto) {
+    public House toEntity(HouseDto dto, User user) {
         House house = new House();
         house.setTypeOfHouse(dto.getTypeOfHouse());
         house.setCountry(dto.getCountry());
@@ -39,6 +41,7 @@ public class HouseMapper {
         house.setHasHomeOffice(dto.isHasHomeOffice());
         house.setNearSupermarkets(dto.isNearSupermarkets());
         house.setHasSelfCheckin(dto.isHasSelfCheckin());
+        house.setUser(user);
         return house;
     }
 }

@@ -1,3 +1,4 @@
+/*
 // Nur zum Testen
 
 package at.technikum.springrestbackend.controller;
@@ -12,3 +13,4 @@ public class HelloController {
         return "Hello World! This is public to everyone";
     }
 }
+*/

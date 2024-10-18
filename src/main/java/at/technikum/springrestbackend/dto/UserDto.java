@@ -1,4 +1,46 @@
 package at.technikum.springrestbackend.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto {
+
+    private Long id;
+
+    @NotBlank(message = "Salutation is required.")
+    private String salutation;
+
+    private String otherSalutation;
+
+    @Email(message = "Invalid email address.")
+    @NotBlank(message = "Email is required.")
+    private String email;
+
+    @NotBlank(message = "Password is required.")
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{12,}",
+            message = "Password must contain at least 12 characters, " +
+                    "with uppercase, lowercase, numbers, and symbols.")
+    private String password;
+
+    @NotBlank(message = "Country is required.")
+    private String country;
+
+    @NotBlank(message = "Role is required.")
+    private String role;  // Füge das Role-Feld hinzu
+
+}
+
+
+
+/*
+package at.technikum.springrestbackend.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,7 +75,9 @@ public class UserDto {
     @NotBlank
     private String token;
 
-    /*private boolean isAdmin;*/
+    */
+/*private boolean isAdmin;*//*
+
     private String role;
 
     private HouseDto houseDto;
@@ -53,7 +97,9 @@ public class UserDto {
                    String pictureUrl,
                    String token,
                    String role
-                   /*boolean isAdmin*/) {
+                   */
+/*boolean isAdmin*//*
+) {
         this.id = id;
         this.salutation = salutation;
         this.other = other;
@@ -62,7 +108,9 @@ public class UserDto {
         this.country = country;
         this.pictureUrl = pictureUrl;
         this.token = token;
-        /*this.isAdmin = isAdmin;*/
+        */
+/*this.isAdmin = isAdmin;*//*
+
         this.role = role;
 
     }
@@ -126,13 +174,15 @@ public class UserDto {
         this.token = token;
     }
 
-    /*public boolean isAdmin() {
+    */
+/*public boolean isAdmin() {
         return isAdmin;
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
-    }*/
+    }*//*
+
 
     public String getRole() {
         return role;
@@ -158,3 +208,4 @@ public class UserDto {
         this.houseDto = houseDto;
     }
 }
+*/

@@ -1,6 +1,7 @@
 package at.technikum.springrestbackend.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -48,5 +49,8 @@ public class HouseDto {
 
 
     private boolean hasSelfCheckin;
+
+    @NotNull(message = "User ID is required")
+    private Long userId;
 }
 

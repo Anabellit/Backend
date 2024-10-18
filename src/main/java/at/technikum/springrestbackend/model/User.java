@@ -3,6 +3,53 @@ package at.technikum.springrestbackend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Salutation is required.")
+    private String salutation;
+
+    private String otherSalutation; // Optional, falls 'Other' gewählt wird
+
+    @Email(message = "Invalid email address.")
+    @NotBlank(message = "Email is required.")
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank(message = "Password is required.")
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{12,}",
+            message = "Password must contain at least 12 characters, " +
+                    "with uppercase, lowercase, numbers, and symbols.")
+    private String password;
+
+    @NotBlank(message = "Country is required.")
+    private String country;
+
+    @NotBlank(message = "Role is required.")
+    private String role;  // Füge das Role-Feld hinzu
+}
+
+
+
+/*
+package at.technikum.springrestbackend.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -38,7 +85,9 @@ public class User {
     @NotBlank
     private String token;
 
-    /*private boolean isAdmin;*/
+    */
+/*private boolean isAdmin;*//*
+
 
     private String role;
 
@@ -59,7 +108,9 @@ public class User {
                 String country,
                 String pictureUrl,
                 String token,
-                /*boolean isAdmin,*/
+                */
+/*boolean isAdmin,*//*
+
                 String role,
                 House house) {
         this.id = id;
@@ -74,7 +125,9 @@ public class User {
             this.pictureUrl = pictureUrl;
         }
         this.token = token;
-        /*this.isAdmin = isAdmin;*/
+        */
+/*this.isAdmin = isAdmin;*//*
+
         this.role = role;
         this.house = house;
     }
@@ -89,7 +142,9 @@ public class User {
                 String pictureUrl,
                 String token,
                 String role
-                /*boolean isAdmin*/) {
+                */
+/*boolean isAdmin*//*
+) {
         this.id = id;
         this.salutation = salutation;
         this.other = other;
@@ -102,7 +157,9 @@ public class User {
             this.pictureUrl = pictureUrl;
         }
         this.token = token;
-        /*this.isAdmin = isAdmin;*/
+        */
+/*this.isAdmin = isAdmin;*//*
+
         this.role = role;
     }
 
@@ -163,13 +220,15 @@ public class User {
         this.token = token;
     }
 
-   /* public boolean isAdmin() {
+   */
+/* public boolean isAdmin() {
         return isAdmin;
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
-    }*/
+    }*//*
+
 
     public String getGetRole() {
         return getRole;
@@ -199,3 +258,4 @@ public class User {
         this.house = house;
     }
 }
+*/

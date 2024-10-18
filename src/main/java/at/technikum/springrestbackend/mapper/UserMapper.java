@@ -4,6 +4,43 @@ import at.technikum.springrestbackend.dto.UserDto;
 import at.technikum.springrestbackend.model.User;
 import org.springframework.stereotype.Component;
 
+
+@Component
+public class UserMapper {
+
+    public UserDto toDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setSalutation(user.getSalutation());
+        dto.setOtherSalutation(user.getOtherSalutation());
+        dto.setEmail(user.getEmail());
+        dto.setCountry(user.getCountry());
+        dto.setRole(user.getRole());
+        return dto;
+    }
+
+    public User toEntity(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setSalutation(userDto.getSalutation());
+        user.setOtherSalutation(userDto.getOtherSalutation());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setCountry(userDto.getCountry());
+        user.setRole(userDto.getRole());
+        return user;
+    }
+}
+
+
+
+/*
+package at.technikum.springrestbackend.mapper;
+
+import at.technikum.springrestbackend.dto.UserDto;
+import at.technikum.springrestbackend.model.User;
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
 @Component
@@ -36,7 +73,9 @@ public class UserMapper {
                     userDto.getCountry(),
                     userDto.getPictureUrl(),
                     userDto.getToken(),
-                    /*userDto.isAdmin()*/
+                    */
+/*userDto.isAdmin()*//*
+
                     userDto.getRole()
 
             );
@@ -51,8 +90,11 @@ public class UserMapper {
                 userDto.getCountry(),
                 userDto.getPictureUrl(),
                 userDto.getToken(),
-                /*userDto.isAdmin()*/
+                */
+/*userDto.isAdmin()*//*
+
                 userDto.getRole()
         );
     }
 }
+*/

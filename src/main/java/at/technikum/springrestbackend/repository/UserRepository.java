@@ -4,7 +4,15 @@ import at.technikum.springrestbackend.model.User;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface UserRepository extends ListCrudRepository<User, String>{
+public interface UserRepository extends ListCrudRepository<User, Long> {
+
+    // Methode zum Überprüfen, ob eine E-Mail existiert
+    boolean existsByEmail(String email);
+
+    // Methode zum Abrufen eines Benutzers anhand der E-Mail-Adresse
+    Optional<User> findByEmail(String email);
 }
 
