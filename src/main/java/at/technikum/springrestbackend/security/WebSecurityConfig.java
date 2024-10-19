@@ -44,8 +44,10 @@ public class WebSecurityConfig {
                         .requestMatchers("/houses", "/houses/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/houseswap", "/houseswap/**").permitAll()
-                        .requestMatchers("/users", "/users/register").permitAll()
+                        .requestMatchers("/users/register").permitAll()
+                        .requestMatchers("/users/**").authenticated()
                         .requestMatchers("/error").permitAll());
+
         return http.build();
     }
 

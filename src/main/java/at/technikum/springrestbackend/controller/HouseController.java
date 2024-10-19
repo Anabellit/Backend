@@ -51,4 +51,16 @@ public class HouseController {
         // Rückgabe mit 200 OK
         return ResponseEntity.status(HttpStatus.OK).body(updatedHouse);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<HouseDto> getHouseByUserId(@PathVariable Long userId) {
+        HouseDto houseDto = houseService.getHouseByUserId(userId);
+
+        if (houseDto != null) {
+            return ResponseEntity.ok(houseDto);  // HTTP 200 OK, wenn das Haus gefunden wurde
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);   // HTTP 404 Not Found, wenn kein Haus gefunden wurde
+        }
+    }
 }

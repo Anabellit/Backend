@@ -3,6 +3,31 @@ package at.technikum.springrestbackend.controller;
 import at.technikum.springrestbackend.model.LoginRequest;
 import at.technikum.springrestbackend.model.LoginResponse;
 import at.technikum.springrestbackend.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@CrossOrigin
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthController {
+
+    private final AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        LoginResponse loginResponse = authService.attemptLogin(loginRequest.getUsername(),
+                loginRequest.getPassword());
+        return ResponseEntity.ok(loginResponse);
+    }
+}
+
+/*package at.technikum.springrestbackend.controller;
+
+import at.technikum.springrestbackend.model.LoginRequest;
+import at.technikum.springrestbackend.model.LoginResponse;
+import at.technikum.springrestbackend.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -52,7 +77,7 @@ public class AuthController {
                 .body("An internal server error occurred: "
                 + e.getMessage());
     }
-}
+}*/
 
 
 /*

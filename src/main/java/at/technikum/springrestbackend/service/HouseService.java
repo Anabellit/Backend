@@ -57,4 +57,13 @@ public class HouseService {
     public void deleteHouse(Long id) {
         houseRepository.deleteById(id);
     }
+
+    // Methode zum Abrufen des Hauses basierend auf der User-ID
+    public HouseDto getHouseByUserId(Long userId) {
+        House house = houseRepository.findByUserId(userId)
+                .orElseThrow(()
+                        -> new RuntimeException("House not found for user with ID: " + userId));
+
+        return houseMapper.toDto(house);
+    }
 }

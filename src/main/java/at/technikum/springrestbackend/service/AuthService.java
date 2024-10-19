@@ -1,5 +1,52 @@
 package at.technikum.springrestbackend.service;
 
+import at.technikum.springrestbackend.model.LoginResponse;
+import at.technikum.springrestbackend.repository.UserRepository;
+import at.technikum.springrestbackend.security.JwtIssuer;
+import at.technikum.springrestbackend.security.UserPrincipal;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+    private final JwtIssuer jwtIssuer;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+
+    public LoginResponse attemptLogin(String username, String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+
+        // Umwandeln von Collection<GrantedAuthority> zu List<String>
+        List<String> roles = principal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)  // Extrahiere den Namen der Authority (Rolle)
+                .collect(Collectors.toList());
+
+        // Token generieren und zurückgeben
+        String token = jwtIssuer.issue(principal.getId(), principal.getUsername(), roles);
+
+        return new LoginResponse(token);
+    }
+}
+
+
+
+/*package at.technikum.springrestbackend.service;
+
 import at.technikum.springrestbackend.model.User;
 import at.technikum.springrestbackend.repository.UserRepository;
 import at.technikum.springrestbackend.model.LoginRequest;
@@ -56,7 +103,7 @@ public class AuthService {
         // Rückgabe der LoginResponse mit dem JWT-Token
         return new LoginResponse(token);
     }
-}
+}*/
 
 
 
