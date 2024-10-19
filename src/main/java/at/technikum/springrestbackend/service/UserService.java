@@ -6,6 +6,7 @@ import at.technikum.springrestbackend.model.User;
 import at.technikum.springrestbackend.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,10 +17,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder; // Inject the password encoder
 
     // Registrierung eines neuen Benutzers
     public UserDto registerUser(@Valid UserDto userDto) {
         User user = userMapper.toEntity(userDto);
+
+        // Encode the password before saving the user
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }

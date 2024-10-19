@@ -24,28 +24,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final CustomUserDetailService customUserDetailService;
 
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
-        // Add JWT filter to the security chain
         http
                 .addFilterBefore(jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
-
-        http
-                // Disable CORS and CSRF
+                        UsernamePasswordAuthenticationFilter.class)
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                // Set sessions to stateless
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Disable formLogin
                 .formLogin(AbstractHttpConfigurer::disable)
-                // Makes the configuration works on the whole application
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry
-                        // Swagger UI access
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/").permitAll()
@@ -53,9 +44,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/houses", "/houses/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/houseswap", "/houseswap/**").permitAll()
-                        .requestMatchers("/users", "/users/**").permitAll()
+                        .requestMatchers("/users", "/users/register").permitAll()
                         .requestMatchers("/error").permitAll());
-                        //.anyRequest().authenticated());
         return http.build();
     }
 
@@ -79,15 +69,15 @@ public class WebSecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:63343") // Allow requests from this origin
+                        .allowedOrigins("http://localhost:63343")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };
     }
-
 }
+
 
 
 /*

@@ -23,10 +23,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        // Kein Filter für den Login-Endpunkt
-        return path.startsWith("/auth/login");
-
+        // Exclude login and possibly registration or public paths from the JWT filter
+        return path.startsWith("/auth/login") ||
+                path.startsWith("/users/register") || path.startsWith("/swagger-ui");
     }
+
 
 
     @Override
@@ -49,6 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
             return Optional.of(token.substring(7));
         }
+        System.out.println("No valid token found in request");
         return Optional.empty();
     }
+
 }

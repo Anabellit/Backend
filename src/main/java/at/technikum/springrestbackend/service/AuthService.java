@@ -29,9 +29,6 @@ public class AuthService {
     public LoginResponse attemptLogin(LoginRequest loginRequest) throws AccessDeniedException {
         // Suche den Benutzer anhand des Benutzernamens (nicht mehr anhand der Email)
         Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
-        /*if (userOptional.isPresent() && !userOptional.get().isActive()) {
-            throw new AccessDeniedException("User is inactive.");
-        }*/
         // Falls Benutzer nicht existiert, eine Ausnahme werfen
         if (userOptional.isEmpty()) {
             throw new AccessDeniedException("Invalid username or password.");
