@@ -5,6 +5,7 @@ import at.technikum.springrestbackend.service.HouseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +18,37 @@ public class HouseController {
 
     private final HouseService houseService;
 
+    // GET - Abrufen aller Häuser
     @GetMapping
-    public List<HouseDto> getAllHouses() {
-        return houseService.getAllHouses();
+    public ResponseEntity<List<HouseDto>> getAllHouses() {
+        List<HouseDto> houses = houseService.getAllHouses();
+        // Rückgabe mit 200 OK
+        return ResponseEntity.status(HttpStatus.OK).body(houses);
     }
 
+    // GET - Abrufen eines Hauses anhand der ID
     @GetMapping("/{id}")
-    public HouseDto getHouseById(@PathVariable Long id) {
-        return houseService.getHouseById(id);
+    public ResponseEntity<HouseDto> getHouseById(@PathVariable Long id) {
+        HouseDto house = houseService.getHouseById(id);
+        // Rückgabe mit 200 OK
+        return ResponseEntity.status(HttpStatus.OK).body(house);
     }
 
+    // POST - Erstellen eines neuen Hauses
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public HouseDto createHouse(@RequestBody @Valid HouseDto houseDto) {
-        return houseService.createHouse(houseDto);
+    public ResponseEntity<HouseDto> createHouse(@RequestBody @Valid HouseDto houseDto) {
+        HouseDto createdHouse = houseService.createHouse(houseDto);
+        // Rückgabe mit 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdHouse);
     }
 
+    // PUT - Aktualisieren eines Hauses anhand der ID
     @PutMapping("/{id}")
-    public HouseDto updateHouse(
-            @PathVariable Long id,
-            @RequestBody @Valid HouseDto houseDto) {
-        return houseService.updateHouse(id, houseDto);
+    public ResponseEntity<HouseDto> updateHouse(@PathVariable Long id,
+                                                @RequestBody
+                                                @Valid HouseDto houseDto) {
+        HouseDto updatedHouse = houseService.updateHouse(id, houseDto);
+        // Rückgabe mit 200 OK
+        return ResponseEntity.status(HttpStatus.OK).body(updatedHouse);
     }
 }
-
