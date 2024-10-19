@@ -46,7 +46,8 @@ public class HouseSwapController {
     // PUT-Endpunkt, um einen bestehenden HouseSwap zu aktualisieren
     @PutMapping("/{id}")
     public ResponseEntity<HouseSwapDto> updateHouseSwap(@PathVariable Long id,
-                                                        @RequestBody @Valid HouseSwapDto houseSwapDto) {
+                                                        @RequestBody
+                                                        @Valid HouseSwapDto houseSwapDto) {
         HouseSwapDto updatedHouseSwap = houseSwapService.updateHouseSwap(id, houseSwapDto);
         // Rückgabe mit 200 OK
         return ResponseEntity.status(HttpStatus.OK).body(updatedHouseSwap);

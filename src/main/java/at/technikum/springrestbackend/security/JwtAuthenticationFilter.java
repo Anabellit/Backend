@@ -21,6 +21,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtToPrincipalConverter jwtToPrincipalConverter;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        // Kein Filter für den Login-Endpunkt
+        return path.startsWith("/auth/login");
+
+    }
+
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)

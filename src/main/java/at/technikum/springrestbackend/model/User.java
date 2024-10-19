@@ -24,6 +24,10 @@ public class User {
 
     private String otherSalutation; // Optional, falls 'Other' gewählt wird
 
+    @NotBlank(message = "Username is required.")
+    @Column(unique = true)  // Username sollte eindeutig sein
+    private String username;
+
     @Email(message = "Invalid email address.")
     @NotBlank(message = "Email is required.")
     @Column(unique = true)

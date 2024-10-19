@@ -19,6 +19,9 @@ public class UserDto {
 
     private String otherSalutation;
 
+    @NotBlank(message = "Username is required.")
+    private String username;
+
     @Email(message = "Invalid email address.")
     @NotBlank(message = "Email is required.")
     private String email;

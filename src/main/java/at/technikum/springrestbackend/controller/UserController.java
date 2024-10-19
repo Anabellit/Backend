@@ -22,12 +22,21 @@ public class UserController {
     // POST - Registrierung eines neuen Benutzers
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid UserDto userDto) {
+        Map<String, String> errorResponse = new HashMap<>();
+
+        // Überprüfung, ob die E-Mail bereits existiert
         if (userService.emailExists(userDto.getEmail())) {
-            // Fehlernachricht, wenn die E-Mail bereits existiert
-            Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Email already exists.");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse); // 409 Conflict
         }
+
+        // Überprüfung, ob der Benutzername bereits existiert
+        if (userService.usernameExists(userDto.getUsername())) {
+            errorResponse.put("error", "Username already exists.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse); // 409 Conflict
+        }
+
+        // Wenn E-Mail und Benutzername beide verfügbar sind
         UserDto createdUser = userService.registerUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); // 201 Created
     }
@@ -39,7 +48,6 @@ public class UserController {
             UserDto userDto = userService.getUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body(userDto); // 200 OK
         } catch (RuntimeException ex) {
-            // Fehlernachricht, wenn der Benutzer nicht gefunden wird
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "User with ID " + id + " not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse); // 404 Not Found
@@ -48,12 +56,22 @@ public class UserController {
 
     // PUT - Aktualisieren eines Benutzers anhand der ID
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id,
+                                        @RequestBody
+                                        @Valid UserDto userDto) {
         try {
+            // Überprüfung, ob der Benutzername bereits existiert (außer der aktuelle Benutzer)
+            if (userService.usernameExists(userDto.getUsername())
+                    && !userService.getUserById(id).getUsername().equals(userDto.getUsername())) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Username already exists.");
+                // 409 Conflict
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+            }
+
             UserDto updatedUser = userService.updateUser(id, userDto);
             return ResponseEntity.status(HttpStatus.OK).body(updatedUser); // 200 OK
         } catch (RuntimeException ex) {
-            // Fehlernachricht, wenn der Benutzer nicht gefunden wird
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "User with ID " + id + " not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse); // 404 Not Found

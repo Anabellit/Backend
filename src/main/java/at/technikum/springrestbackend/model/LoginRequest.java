@@ -1,6 +1,7 @@
 package at.technikum.springrestbackend.model;
 
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,9 @@ import lombok.Getter;
 @Builder
 public class LoginRequest {
 
-    private String email;
+    @NotBlank
+    private String username;
+
+    @NotBlank
     private String password;
 }

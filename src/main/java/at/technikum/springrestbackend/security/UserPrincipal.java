@@ -1,18 +1,43 @@
 package at.technikum.springrestbackend.security;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 
-@Builder
+
 public class UserPrincipal implements UserDetails {
 
-    private Long userId;
-    private String email;
+    private final Long userId;
+
+    private final String username;
+
+    @JsonIgnore
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
+
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    public UserPrincipal(Long userId,
+                         String username,
+                         Collection<? extends GrantedAuthority> authorities) {
+        this.userId = userId;
+        this.username = username;
+        this.authorities = authorities;
+    }
+
+    public UserPrincipal(Long userId,
+                         String username,
+                         String password,
+                         Collection<? extends GrantedAuthority> authorities) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
+    public Long getId() {
+        return userId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -26,7 +51,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
