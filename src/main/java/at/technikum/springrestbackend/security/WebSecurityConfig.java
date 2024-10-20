@@ -39,15 +39,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/houses", "/houses/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/houseswap", "/houseswap/**").permitAll()
                         .requestMatchers("/users/register").permitAll()
-                        .requestMatchers("/users/**").authenticated()
-                        .requestMatchers("/error").permitAll());
-
+                        .requestMatchers("houses", "/houses/register", "/houses/{id}").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/error").permitAll()
+                        .anyRequest().authenticated());
         return http.build();
     }
 

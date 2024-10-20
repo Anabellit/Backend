@@ -3,7 +3,7 @@ package at.technikum.springrestbackend.dto;
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-//import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,11 +27,10 @@ public class UserDto {
     @NotBlank(message = "Email is required.")
     private String email;
 
-    /*@JsonIgnore*/
     @NotBlank(message = "Password is required.")
-    /*@Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{12,}",
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{12,}",
             message = "Password must contain at least 12 characters, " +
-                    "with uppercase, lowercase, numbers, and symbols.")*/
+                    "with uppercase, lowercase, numbers, and symbols.")
     private String password;
 
     @NotBlank(message = "Country is required.")

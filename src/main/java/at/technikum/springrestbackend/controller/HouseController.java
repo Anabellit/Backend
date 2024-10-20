@@ -35,7 +35,7 @@ public class HouseController {
     }
 
     // POST - Erstellen eines neuen Hauses
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<HouseDto> createHouse(@RequestBody @Valid HouseDto houseDto) {
         HouseDto createdHouse = houseService.createHouse(houseDto);
         // Rückgabe mit 201 Created
@@ -52,6 +52,7 @@ public class HouseController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedHouse);
     }
 
+    // GET - Abrufen eines Hauses anhand der User-ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<HouseDto> getHouseByUserId(@PathVariable Long userId) {
         HouseDto houseDto = houseService.getHouseByUserId(userId);
@@ -61,6 +62,20 @@ public class HouseController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(null);   // HTTP 404 Not Found, wenn kein Haus gefunden wurde
+        }
+    }
+
+    // PUT - Aktualisieren eines Hauses basierend auf der User-ID
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<HouseDto> updateHouseByUserId(@PathVariable Long userId,
+                                                        @RequestBody @Valid HouseDto houseDto) {
+        HouseDto updatedHouse = houseService.updateHouseByUserId(userId, houseDto);
+
+        if (updatedHouse != null) {
+            return ResponseEntity.ok(updatedHouse);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
         }
     }
 }

@@ -1,9 +1,12 @@
 package at.technikum.springrestbackend.controller;
 
 import at.technikum.springrestbackend.dto.UserDto;
+import at.technikum.springrestbackend.dto.UserProfileDto;
+import at.technikum.springrestbackend.exception.UserNotFoundException;
 import at.technikum.springrestbackend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +78,31 @@ public class UserController {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "User with ID " + id + " not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse); // 404 Not Found
+        }
+    }
+
+    // Update nur fürs Benutzerprofil
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<?> updateUserProfile(@PathVariable Long id,
+                                               @RequestBody @Valid UserProfileDto userProfileDto) {
+        try {
+            // Aktualisiere das Benutzerprofil
+            UserProfileDto updatedUserProfile = userService.updateUserProfile(id, userProfileDto);
+            return ResponseEntity.ok(updatedUserProfile);
+        } catch (UserNotFoundException e) {
+            // Benutzer nicht gefunden - gebe 404 zurück
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with ID " + id + " not found.");
+        } catch (DataIntegrityViolationException e) {
+            // Datenintegritätsverletzung - gebe 400 zurück
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Data integrity violation: " + e.getMessage());
+        } catch (Exception e) {
+            // Allgemeiner Fehler - gebe 500 zurück
+            // Fehler im Log ausgeben
+            System.err.println("Error updating user profile: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating the user profile.");
         }
     }
 }

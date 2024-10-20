@@ -1,6 +1,7 @@
 package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.UserDto;
+import at.technikum.springrestbackend.dto.UserProfileDto;
 import at.technikum.springrestbackend.model.User;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,23 @@ public class UserMapper {
         user.setPassword(userDto.getPassword());
         user.setCountry(userDto.getCountry());
         user.setRole(userDto.getRole());
+        return user;
+    }
+
+    // Map User to UserProfileDto (ohne Passwort)
+    public UserProfileDto toUserProfileDto(User user) {
+        UserProfileDto dto = new UserProfileDto();
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setCountry(user.getCountry());
+        return dto;
+    }
+
+    // Map UserProfileDto to User (ohne Passwort)
+    public User toEntity(UserProfileDto userProfileDto, User user) {
+        user.setUsername(userProfileDto.getUsername());
+        user.setEmail(userProfileDto.getEmail());
+        user.setCountry(userProfileDto.getCountry());
         return user;
     }
 }

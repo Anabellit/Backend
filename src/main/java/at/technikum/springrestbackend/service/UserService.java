@@ -1,11 +1,14 @@
 package at.technikum.springrestbackend.service;
 
 import at.technikum.springrestbackend.dto.UserDto;
+import at.technikum.springrestbackend.dto.UserProfileDto;
+import at.technikum.springrestbackend.exception.UserNotFoundException;
 import at.technikum.springrestbackend.mapper.UserMapper;
 import at.technikum.springrestbackend.model.User;
 import at.technikum.springrestbackend.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +68,25 @@ public class UserService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public UserProfileDto updateUserProfile(Long id, @Valid UserProfileDto userProfileDto) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
+
+        existingUser.setCountry(userProfileDto.getCountry());
+        existingUser.setUsername(userProfileDto.getUsername());
+        existingUser.setEmail(userProfileDto.getEmail());
+
+        try {
+            // Speichere die aktualisierten Benutzerdaten
+            User updatedUser = userRepository.save(existingUser);
+            return userMapper.toUserProfileDto(updatedUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Data integrity violation: "
+                    + e.getMessage());
+        }
+    }
+
 
     // Aktualisierung der Benutzerdaten
     public UserDto updateUser(Long id, @Valid UserDto userDto) {
