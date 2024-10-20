@@ -105,4 +105,24 @@ public class UserController {
                     .body("An error occurred while updating the user profile.");
         }
     }
+
+    // DELETE - Löschen eines Benutzers anhand der ID
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        try {
+            // Versuche, den Benutzer zu löschen
+            userService.deleteUserById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 204 No Content
+        } catch (UserNotFoundException ex) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "User with ID " + id + " not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse); // 404 Not Found
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "An error occurred while deleting the user.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(errorResponse); // 500 Internal Server Error
+        }
+    }
 }
+

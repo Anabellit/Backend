@@ -111,7 +111,19 @@ public class UserService {
         // Aktualisierte Benutzerdaten als DTO zurückgeben
         return userMapper.toDto(updatedUser);
     }
+
+
+    // Methode zum Löschen eines Benutzers anhand der ID
+    public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("User with ID " + id + " not found");
+        }
+
+        // Benutzer löschen
+        userRepository.deleteById(id);
+    }
 }
+
 
 
 /*
