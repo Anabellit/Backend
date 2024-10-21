@@ -1,29 +1,27 @@
-/*
 package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.UserDto;
 import at.technikum.springrestbackend.model.User;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserMapperTest {
+
+    private final UserMapper userMapper = new UserMapper();
+
     @Test
     void whenUserValue_thenDtoSameValue() {
         // Arrange
-        UserMapper userMapper = new UserMapper();
-        String id = UUID.randomUUID().toString();
+        Long id = 1L;
         User user = new User(id,
                 "Frau",
-                "",
+                "Other",
                 "test@testnetzwerk.at",
                 "passwort567",
                 "Germany",
                 "1234",
-                "werwr",
                 "ADMIN");
 
         // Act
@@ -32,12 +30,13 @@ public class UserMapperTest {
         // Assert
         assertEquals(id, userDto.getId());
         assertEquals("test@testnetzwerk.at", userDto.getEmail());
+        assertEquals("Germany", userDto.getCountry());
+        assertEquals("ADMIN", userDto.getRole());
     }
 
     @Test
     void whenDtoNoId_thenUserHasId() {
         // Arrange
-        UserMapper userMapper = new UserMapper();
         UserDto userDto = new UserDto();
         userDto.setEmail("test@testnetzwerk.at");
 
@@ -46,21 +45,20 @@ public class UserMapperTest {
 
         // Assert
         assertNotNull(user.getId());
+        assertEquals("test@testnetzwerk.at", user.getEmail());
     }
 
     @Test
     void whenDtoValue_thenUserSameValue() {
         // Arrange
-        UserMapper userMapper = new UserMapper();
-        String id = UUID.randomUUID().toString();
+        Long id = 1L;
         UserDto userDto = new UserDto(id,
                 "Frau",
-                "",
+                "Other",
                 "test@testnetzwerk.at",
                 "passwort567",
                 "Germany",
                 "1234",
-                "werwr",
                 "USER");
 
         // Act
@@ -69,6 +67,7 @@ public class UserMapperTest {
         // Assert
         assertEquals(id, user.getId());
         assertEquals("test@testnetzwerk.at", user.getEmail());
+        assertEquals("USER", user.getRole());
+        assertEquals("Germany", user.getCountry());
     }
 }
-*/

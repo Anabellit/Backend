@@ -96,6 +96,19 @@ public class HouseService {
         House updatedHouse = houseRepository.save(existingHouse);
         return houseMapper.toDto(updatedHouse);
     }
+
+    // Methode zum Löschen des Hauses eines Benutzers
+    public void deleteHouseByUserId(Long userId) {
+        try {
+            houseRepository.deleteByUserId(userId);
+        } catch (Exception e) {
+            // Logge die genaue Fehlermeldung
+            System.out.println("Fehler beim Löschen des Hauses für User-ID: " + userId);
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred while deleting the house.");
+        }
+    }
+
 }
 
 

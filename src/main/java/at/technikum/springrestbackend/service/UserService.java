@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final HouseService houseService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder; // Inject the password encoder
 
@@ -112,16 +114,22 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
-
-    // Methode zum Löschen eines Benutzers anhand der ID
+    @Transactional
     public void deleteUserById(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User with ID " + id + " not found");
-        }
+        try {
+            // Lösche das Haus des Benutzers
+            houseService.deleteHouseByUserId(id);
 
-        // Benutzer löschen
-        userRepository.deleteById(id);
+            // Lösche den Benutzer
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            // Logge die genaue Fehlermeldung
+            System.out.println("Fehler beim Löschen des Benutzers mit ID: " + id);
+            e.printStackTrace();  // Zeige die vollständige Fehlermeldung an
+            throw new RuntimeException("An error occurred while deleting the user.");
+        }
     }
+
 }
 
 

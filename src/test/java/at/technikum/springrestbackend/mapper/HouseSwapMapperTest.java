@@ -1,11 +1,10 @@
-/*package at.technikum.springrestbackend.mapper;
+package at.technikum.springrestbackend.mapper;
 
 import at.technikum.springrestbackend.dto.HouseSwapDto;
+import at.technikum.springrestbackend.model.House;
 import at.technikum.springrestbackend.model.HouseSwap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,55 +21,66 @@ class HouseSwapMapperTest {
     @Test
     void whenHouseSwapValue_thenDtoSameValue() {
         // Arrange
-        String id = UUID.randomUUID().toString();
-        HouseSwap houseSwap = new HouseSwap(id, "user1", "swapper1", "house1", "swapHouse1");
+        Long id = 1L;
+        House house = new House();
+        house.setId(1L);
+
+        HouseSwap houseSwap = new HouseSwap();
+        houseSwap.setId(id);
+        houseSwap.setHouse(house);
+        houseSwap.setMessage("House swap request");
+        houseSwap.setStatus("Pending");
 
         // Act
         HouseSwapDto houseSwapDto = houseSwapMapper.toDto(houseSwap);
 
         // Assert
         assertEquals(id, houseSwapDto.getId());
-        assertEquals("user1", houseSwapDto.getUser());
-        assertEquals("swapper1", houseSwapDto.getSwapper());
-        assertEquals("house1", houseSwapDto.getHouse());
-        assertEquals("swapHouse1", houseSwapDto.getSwapHouse());
+        assertEquals(1L, houseSwapDto.getHouseId());
+        assertEquals("House swap request", houseSwapDto.getMessage());
+        assertEquals("Pending", houseSwapDto.getStatus());
     }
 
     @Test
     void whenDtoNoId_thenHouseSwapHasId() {
         // Arrange
         HouseSwapDto houseSwapDto = new HouseSwapDto();
-        houseSwapDto.setUser("user2");
-        houseSwapDto.setSwapper("swapper2");
-        houseSwapDto.setHouse("house2");
-        houseSwapDto.setSwapHouse("swapHouse2");
+        houseSwapDto.setMessage("New house swap request");
+        houseSwapDto.setStatus("Pending");
+
+        House house = new House();
+        house.setId(2L);
 
         // Act
-        HouseSwap houseSwap = houseSwapMapper.toEntity(houseSwapDto);
+        HouseSwap houseSwap = houseSwapMapper.toEntity(houseSwapDto, house);
 
         // Assert
-        assertNotNull(houseSwap.getId());
-        assertEquals("user2", houseSwap.getUser());
-        assertEquals("swapper2", houseSwap.getSwapper());
-        assertEquals("house2", houseSwap.getHouse());
-        assertEquals("swapHouse2", houseSwap.getSwapHouse());
+        assertNotNull(houseSwap.getId()); // HouseSwap should have a non-null ID
+        assertEquals("New house swap request", houseSwap.getMessage());
+        assertEquals("Pending", houseSwap.getStatus());
+        assertEquals(house, houseSwap.getHouse()); // House should be correctly set
     }
 
     @Test
     void whenDtoValue_thenHouseSwapSameValue() {
         // Arrange
-        String id = UUID.randomUUID().toString();
-        HouseSwapDto houseSwapDto = new HouseSwapDto(id, "user3", "swapper3", "house3", "swapHouse3");
+        Long id = 3L;
+        House house = new House();
+        house.setId(3L);
+
+        HouseSwapDto houseSwapDto = new HouseSwapDto();
+        houseSwapDto.setId(id);
+        houseSwapDto.setHouseId(house.getId());
+        houseSwapDto.setMessage("Another swap request");
+        houseSwapDto.setStatus("Accepted");
 
         // Act
-        HouseSwap houseSwap = houseSwapMapper.toEntity(houseSwapDto);
+        HouseSwap houseSwap = houseSwapMapper.toEntity(houseSwapDto, house);
 
         // Assert
         assertEquals(id, houseSwap.getId());
-        assertEquals("user3", houseSwap.getUser());
-        assertEquals("swapper3", houseSwap.getSwapper());
-        assertEquals("house3", houseSwap.getHouse());
-        assertEquals("swapHouse3", houseSwap.getSwapHouse());
+        assertEquals(house, houseSwap.getHouse());
+        assertEquals("Another swap request", houseSwap.getMessage());
+        assertEquals("Accepted", houseSwap.getStatus());
     }
 }
-*/
