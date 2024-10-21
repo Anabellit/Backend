@@ -41,7 +41,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/users/register").permitAll()
-                        .requestMatchers("/houses", "/houses/register", "/houses/{id}").permitAll()
+                        .requestMatchers("/houses", "/houses/register",
+                                "/houses/{id}", "/houses/user/{id}").permitAll()
                         .requestMatchers("/users/delete/{id}").hasAuthority("ADMIN")
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated());
