@@ -17,6 +17,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final String API_KEY_HEADER = "x-api-key";
+    private static final String API_KEY_VALUE = "L8Az2TFD4s";
+
     private final JwtDecoder jwtDecoder;
     private final JwtToPrincipalConverter jwtToPrincipalConverter;
 
@@ -26,24 +29,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // Validate API key before JWT
+        if (!isValidApiKey(request)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid API Key");
+            return;
+        }
+
+        // Process JWT Token if API key is valid
         extractTokenFromRequest(request)
-                .map(jwtDecoder::decode)  // JWT entschlüsseln
-                .map(jwtToPrincipalConverter::convert)  // JWT in UserPrincipal konvertieren
+                .map(jwtDecoder::decode)  // Decode the JWT
+                .map(jwtToPrincipalConverter::convert)  // Convert JWT to UserPrincipal
                 .map(userPrincipal -> new UserPrincipalAuthenticationToken(
                         userPrincipal,
-                        null,  // Keine Anmeldeinformationen erforderlich
-                        userPrincipal.getAuthorities()))  // Benutzerrollen hinzufügen
+                        null,  // No credentials required
+                        userPrincipal.getAuthorities()))  // Add user roles
                 .ifPresent(authentication -> SecurityContextHolder.getContext()
-                        .setAuthentication(authentication));  // Benutzer authentifizieren
+                        .setAuthentication(authentication));  // Authenticate the user
 
         filterChain.doFilter(request, response);
     }
 
+
     private Optional<String> extractTokenFromRequest(HttpServletRequest request) {
-        var token = request.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
         if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
-            return Optional.of(token.substring(7));
+            return Optional.of(token.substring(7));  // Remove 'Bearer ' prefix
         }
         return Optional.empty();
+    }
+
+    private boolean isValidApiKey(HttpServletRequest request) {
+        String apiKey = request.getHeader(API_KEY_HEADER);
+        return API_KEY_VALUE.equals(apiKey);
     }
 }

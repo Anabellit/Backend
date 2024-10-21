@@ -20,12 +20,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ApiKeyFilter apiKeyFilter;
     private final UnauthorizedHandler unauthorizedHandler;
 
     public WebSecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
+            ApiKeyFilter apiKeyFilter,
             UnauthorizedHandler unauthorizedHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.apiKeyFilter = apiKeyFilter;
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
@@ -33,10 +36,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
-                .exceptionHandling(h -> h.authenticationEntryPoint(unauthorizedHandler))
+                .exceptionHandling(h ->
+                        h.authenticationEntryPoint(unauthorizedHandler))
+                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(registry -> registry
