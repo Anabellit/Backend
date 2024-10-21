@@ -14,19 +14,19 @@ public class SwaggerConfiguration {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .addSecurityItem(
-                        new SecurityRequirement().addList("Bearer Authentication")
+                        new SecurityRequirement().addList("api_key")
                 )
                 .components(
                         new Components().addSecuritySchemes(
-                                "Bearer Authentication", apiKeyScheme()
+                                "api_key", apiKeyScheme()
                         )
                 );
     }
 
     private SecurityScheme apiKeyScheme() {
         return new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .bearerFormat("JWT")
-                .scheme("bearer");
+                .type(SecurityScheme.Type.APIKEY)
+                .name("API Key")
+                .in(SecurityScheme.In.HEADER);
     }
 }
